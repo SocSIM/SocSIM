@@ -4,13 +4,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>b4edf9dd-a632-4e70-a954-b2200c87e72f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>socsim.py</StartupFile>
+    <StartupFile>socsim\app.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>socsim</Name>
     <RootNamespace>socsim</RootNamespace>
+    <InterpreterId>CondaEnv|CondaEnv|miniconda</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +22,86 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="socsim.py" />
+    <Compile Include="doc\source\conf.py" />
+    <Compile Include="socsim\avalanches\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="socsim\app.py" />
+    <Compile Include="socsim\avalanches\app.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="socsim\tests\test_avalanches.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="socsim\tests\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="socsim\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="socsim\__main__.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="docs\_sources\" />
+    <Folder Include="docs\_static\" />
+    <Folder Include="doc\" />
+    <Folder Include="docs\" />
+    <Folder Include="doc\source\" />
+    <Folder Include="doc\source\_static\" />
+    <Folder Include="doc\source\_templates\" />
+    <Folder Include="socsim\" />
+    <Folder Include="socsim\avalanches\" />
+    <Folder Include="socsim\common\" />
+    <Folder Include="socsim\resources\" />
+    <Folder Include="socsim\tests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|miniconda" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="docs\.buildinfo" />
+    <Content Include="docs\genindex.html" />
+    <Content Include="docs\index.html" />
+    <Content Include="docs\objects.inv" />
+    <Content Include="docs\py-modindex.html" />
+    <Content Include="docs\README.md">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="docs\search.html" />
+    <Content Include="docs\searchindex.js" />
+    <Content Include="docs\_sources\index.rst.txt" />
+    <Content Include="docs\_static\alabaster.css" />
+    <Content Include="docs\_static\basic.css" />
+    <Content Include="docs\_static\custom.css" />
+    <Content Include="docs\_static\doctools.js" />
+    <Content Include="docs\_static\documentation_options.js" />
+    <Content Include="docs\_static\file.png" />
+    <Content Include="docs\_static\jquery-3.2.1.js" />
+    <Content Include="docs\_static\jquery.js" />
+    <Content Include="docs\_static\language_data.js" />
+    <Content Include="docs\_static\minus.png" />
+    <Content Include="docs\_static\plus.png" />
+    <Content Include="docs\_static\pygments.css" />
+    <Content Include="docs\_static\searchtools.js" />
+    <Content Include="docs\_static\underscore-1.3.1.js" />
+    <Content Include="docs\_static\underscore.js" />
+    <Content Include="doc\make.bat" />
+    <Content Include="doc\Makefile" />
+    <Content Include="doc\README.md">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="doc\source\index.rst" />
+    <Content Include="socsim\common\README.md">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="socsim\resources\README.md">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="socsim\tests\README.md">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
