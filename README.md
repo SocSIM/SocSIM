@@ -57,6 +57,7 @@ Most popular documentation generator for Pyhon - [Sphinx](http://www.sphinx-doc.
 
 ### 2.1 Project folder structure
 [sources1](https://stackoverflow.com/questions/193161/what-is-the-best-project-structure-for-a-python-application)
+[source2](https://dev.to/codemouse92/dead-simple-python-project-structure-and-imports-38c6)
 
 
 ### 2.2 Installation and dependencies
