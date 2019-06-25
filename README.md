@@ -51,7 +51,12 @@ Most popular documentation generator for Pyhon - [Sphinx](http://www.sphinx-doc.
 
 
 ## 1. Theoretical problem description
-[Self-organized criticality wiki](https://en.wikipedia.org/wiki/Self-organized_criticality)
+[Self-organized criticality wiki](https://en.wikipedia.org/wiki/Self-organized_criticality):
+In physics, self-organized criticality (SOC) is a property of __dynamical systems__ that have a __critical point__ as an attractor. Their macroscopic behavior thus displays the spatial or temporal scale-invariance characteristic of the critical point of a phase transition, but without the need to tune control parameters to a precise value, because the system, effectively, tunes itself as it evolves towards criticality.
+
+The concept was put forward by Per Bak, Chao Tang and Kurt Wiesenfeld ("BTW") in a paper published in 1987 in Physical Review Letters, and is considered to be one of the mechanisms by which complexity arises in nature. Its concepts have been enthusiastically applied across fields as diverse as geophysics, physical cosmology, evolutionary biology and ecology, bio-inspired computing and optimization (mathematics), economics, quantum gravity, sociology, solar physics, plasma physics, neurobiology and others.
+
+SOC is typically observed in slowly driven non-equilibrium systems with a large number of degrees of freedom and strongly nonlinear dynamics. Many individual examples have been identified since BTW's original paper, but to date there is no known set of general characteristics that guarantee a system will display SOC.
 
 ## 2. Program structure, installation and use cases
 
@@ -67,3 +72,8 @@ Most popular documentation generator for Pyhon - [Sphinx](http://www.sphinx-doc.
 ### 2.3 Use cases
 
 ## 3. Links/References
+[1]  Bak, P., Tang, C. and Wiesenfeld, K. (1987). "Self-organized criticality: an explanation of 1/f noise". Physical Review Letters. 59 (4): 381–384. Bibcode:1987PhRvL..59..381B. doi:10.1103/PhysRevLett.59.381. PMID 10035754. Papercore summary: http://papercore.org/Bak1987.
+[2] [Abelian sandpile model](https://en.wikipedia.org/wiki/Abelian_sandpile_model)
+[3] [Forest-fire model](https://en.wikipedia.org/wiki/Forest-fire_model)
+[4] [Theoretical Models of Self-Organized Criticality (SOC) Systems](https://arxiv.org/abs/1204.5119)
+[5] [Pink noise](https://en.wikipedia.org/wiki/Pink_noise)
