@@ -4,13 +4,13 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>b4edf9dd-a632-4e70-a954-b2200c87e72f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>socsim\app.py</StartupFile>
+    <StartupFile>app.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>socsim</Name>
-    <RootNamespace>socsim</RootNamespace>
+    <RootNamespace></RootNamespace>
     <InterpreterId>CondaEnv|CondaEnv|miniconda</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -23,23 +23,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="doc\source\conf.py" />
-    <Compile Include="socsim\avalanches\__init__.py">
+    <Compile Include="SOC\models\avalanches\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="socsim\app.py" />
-    <Compile Include="socsim\avalanches\app.py">
+    <Compile Include="app.py" />
+    <Compile Include="SOC\models\avalanches\app.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="socsim\tests\test_avalanches.py">
+    <Compile Include="SOC\models\__init__.py" />
+    <Compile Include="SOC\__init__.py" />
+    <Compile Include="SOC\tests\test_avalanches.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="socsim\tests\__init__.py">
+    <Compile Include="SOC\tests\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="socsim\__init__.py">
+    <Compile Include="__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="socsim\__main__.py">
+    <Compile Include="__main__.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -51,11 +53,13 @@
     <Folder Include="doc\source\" />
     <Folder Include="doc\source\_static\" />
     <Folder Include="doc\source\_templates\" />
-    <Folder Include="socsim\" />
-    <Folder Include="socsim\avalanches\" />
-    <Folder Include="socsim\common\" />
-    <Folder Include="socsim\resources\" />
-    <Folder Include="socsim\tests\" />
+    <Folder Include="SOC\models\avalanches\" />
+    <Folder Include="SOC\common\" />
+    <Folder Include="SOC\" />
+    <Folder Include="results\" />
+    <Folder Include="resources\" />
+    <Folder Include="SOC\models\" />
+    <Folder Include="SOC\tests\" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|miniconda" />
@@ -93,13 +97,16 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="doc\source\index.rst" />
-    <Content Include="socsim\common\README.md">
+    <Content Include="results\README.md">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="socsim\resources\README.md">
+    <Content Include="SOC\common\README.md">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="socsim\tests\README.md">
+    <Content Include="resources\README.md">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="SOC\tests\README.md">
       <SubType>Code</SubType>
     </Content>
   </ItemGroup>

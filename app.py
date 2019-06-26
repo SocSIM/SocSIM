@@ -2,7 +2,7 @@
 Starts Self-organized criticality
 """
 
-from socsim.avalanches.app import MainLoop
+from SOC.models.avalanches.app import MainLoop
 
 def run():
     """
@@ -11,3 +11,7 @@ def run():
     print("Hello World")
     MainLoop(100)
     print("lalala")
+
+if __name__ == '__main__':
+    print("app")
+    run()
