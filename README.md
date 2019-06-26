@@ -48,8 +48,27 @@ TODO: add example how to write test case.
 
 #### Logging
 Logging helps to debug application and also is provided by Python standard library
-[logging](https://docs.python.org/3.9/library/logging.html).    
-TODO: add example how to use logging
+[logging](https://docs.python.org/3.9/library/logging.html). Basic tutorial [here](https://docs.python.org/3.9/howto/logging.html#logging-basic-tutorial).
+
+Usage is very simple:
+```python
+logger.debug('debug message')
+logger.info('info message')
+logger.warning('warn message')
+logger.error('error message')
+logger.critical('critical message')
+```
+
+This will generate:
+```
+2019-06-26 17:27:30,436 - Main   - INFO     - info message
+2019-06-26 17:27:30,437 - Main   - WARNING  - warn message
+2019-06-26 17:27:30,439 - Main   - ERROR    - error message
+2019-06-26 17:27:30,440 - Main   - CRITICAL - critical message
+```
+Output will be printed into console and also into log file(appended): simsoc.log.
+
+TODO(how to reconfigure logger from inside: level for example)
  
 #### Documentation
 Most popular documentation generator for Pyhon - [Sphinx](http://www.sphinx-doc.org/en/master/).   
