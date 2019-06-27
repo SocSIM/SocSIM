@@ -1,6 +1,10 @@
 # Self-Organized Criticality Simulation(SocSim)
 [![Faculty of Physics. University of Warsaw](https://www.fuw.edu.pl/tl_files/downloads/logo_18/FUW_znak-poziomy-EN.png).](https://www.fuw.edu.pl/)  
 
+Project is created as part of subject: [Team student projects Faculty of Physics](https://sites.google.com/a/uw.edu.pl/zps/)
+
+---
+
 Programs in Python that simulates dynamical systems that have a critical point as an attractor. So called [__self-organized criticality__(SOC)](https://en.wikipedia.org/wiki/Self-organized_criticality)
 
 #### Basic goals of project:
