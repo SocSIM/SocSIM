@@ -34,6 +34,7 @@ In __Basic goals of project__ are some questions and commitment without solution
 - [ ] How to export/save Jupiter notebooks(to make a posts later)
 - [ ] Rest of todo's goals.
 
+---
 ### 0.2 Commitments
 Here are descibed code formatting style and other conventions, to make code more _uniform_. Also this section is for newcomers and contributors.
 
@@ -73,10 +74,9 @@ Output will be printed into console and also into log file(appended): simsoc.log
 TODO(how to reconfigure logger from inside: level for example)
  
 #### Documentation
-Most popular documentation generator for Pyhon - [Sphinx](http://www.sphinx-doc.org/en/master/).   
-TODO: add example how to write documentation comments
+Most popular documentation generator for Python - [Sphinx](http://www.sphinx-doc.org/en/master/). Good tutorial about using Sphinx [here](https://sphinx-tutorial.readthedocs.io/). [Here](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) is exaple of good Google style docstring standardized by PEP-484.
 
-
+---
 ## 1. Theoretical problem description
 [Self-organized criticality wiki](https://en.wikipedia.org/wiki/Self-organized_criticality):   
 In physics, self-organized criticality (SOC) is a property of __dynamical systems__ that have a __critical point__ as an attractor. Their macroscopic behavior thus displays the spatial or temporal scale-invariance characteristic of the critical point of a phase transition, but without the need to tune control parameters to a precise value, because the system, effectively, tunes itself as it evolves towards criticality.
@@ -85,6 +85,7 @@ The concept was put forward by Per Bak, Chao Tang and Kurt Wiesenfeld ("BTW") in
 
 SOC is typically observed in slowly driven non-equilibrium systems with a large number of degrees of freedom and strongly nonlinear dynamics. Many individual examples have been identified since BTW's original paper, but to date there is no known set of general characteristics that guarantee a system will display SOC.
 
+---
 ## 2. Program structure, installation and use cases
 
 ### 2.1 Project folder structure
@@ -121,6 +122,7 @@ TODO
 
 TODO
 
+---
 ## 3. Links/References
 [1]  Bak, P., Tang, C. and Wiesenfeld, K. (1987). "Self-organized criticality: an explanation of 1/f noise". Physical Review Letters. 59 (4): 381–384. Bibcode:1987PhRvL..59..381B. doi:10.1103/PhysRevLett.59.381. PMID 10035754. Papercore summary: http://papercore.org/Bak1987.   
 [2] [Abelian sandpile model](https://en.wikipedia.org/wiki/Abelian_sandpile_model)   
