@@ -128,9 +128,12 @@ TODO
 
 ---
 ## 3. Links/References
-[1]  Bak, P., Tang, C. and Wiesenfeld, K. (1987). "Self-organized criticality: an explanation of 1/f noise". Physical Review Letters. 59 (4): 381–384. Bibcode:1987PhRvL..59..381B. doi:10.1103/PhysRevLett.59.381. PMID 10035754. Papercore summary: http://papercore.org/Bak1987.   
-[2] [Abelian sandpile model](https://en.wikipedia.org/wiki/Abelian_sandpile_model)   
-[3] [Forest-fire model](https://en.wikipedia.org/wiki/Forest-fire_model)   
-[4] [Theoretical Models of Self-Organized Criticality (SOC) Systems](https://arxiv.org/abs/1204.5119)   
-[5] [Pink noise](https://en.wikipedia.org/wiki/Pink_noise)   
-[6] [Introduction to Self-Organized Criticality & Earthquakes](http://www2.econ.iastate.edu/classes/econ308/tesfatsion/SandpileCA.Winslow97.htm)   
+*  Bak, P., Tang, C. and Wiesenfeld, K. (1987). "Self-organized criticality: an explanation of 1/f noise". Physical Review Letters. 59 (4): 381–384. Bibcode:1987PhRvL..59..381B. doi:10.1103/PhysRevLett.59.381. PMID 10035754. Papercore summary: http://papercore.org/Bak1987.   
+* [Abelian sandpile model](https://en.wikipedia.org/wiki/Abelian_sandpile_model)   
+* [Forest-fire model](https://en.wikipedia.org/wiki/Forest-fire_model)   
+* [Theoretical Models of Self-Organized Criticality (SOC) Systems](https://arxiv.org/abs/1204.5119)   
+* [Pink noise](https://en.wikipedia.org/wiki/Pink_noise)   
+* [Introduction to Self-Organized Criticality & Earthquakes](http://www2.econ.iastate.edu/classes/econ308/tesfatsion/SandpileCA.Winslow97.htm)   
+* [25 Years of Self-Organized Criticality: Solar and Astrophysics](https://arxiv.org/pdf/1403.6528.pdf)
+* [SOC computer simulations](https://arxiv.org/abs/1301.2918)
+* [Theoretical Models of SOC Systems](https://arxiv.org/pdf/1204.5119.pdf)
