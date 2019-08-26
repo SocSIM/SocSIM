@@ -7,9 +7,19 @@ Welcome to SocSim's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 10
    :caption: Contents:
 
+   test
+   AbelianSandpileModel
+
+
+Development 
+===================
+.. py:function:: enumerate(sequence[, start=0])
+
+   Return an iterator that yields tuples of an index and an item of the
+   *sequence*. (And so on.)
 
 
 Indices and tables
@@ -21,10 +31,10 @@ Indices and tables
 
 SocSim main
 ===================
-.. automodule:: socsim
+.. automodule:: SOC
    :members:
 
 SocSim avalance
 ===================
-.. automodule:: socsim.avalance
+.. automodule:: SOC.models.avalanches
    :members:

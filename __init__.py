@@ -1,20 +1,8 @@
-print("init")
-
 """
-Main Class [SocSim]
+SOCSIM INIT
 """
 
-from socsim import app
+import app
+import common
 
-def main():
-    """
-    Main function.
-    """
-    app.run()
-
-if __name__ == '__main__':
-    print("main")
-    main()
-
-main()
-print("not main")
+common.log.info("INIT")

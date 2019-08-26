@@ -17,11 +17,12 @@ sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'SocSim'
+project = 'Self-Organized Criticality Simulation (SocSim)'
 copyright = '2019, Oleg Kmechak'
 author = 'Oleg Kmechak'
 
 # The full version, including alpha/beta/rc tags
+version = '0.0.1'
 release = '0.0.1'
 
 
@@ -32,7 +33,8 @@ release = '0.0.1'
 # ones.
 extensions = [
     #'rinoh.frontend.sphinx'
-    'sphinx.ext.autodoc'
+    'sphinx.ext.autodoc',
+    'recommonmark'
 ]
 
 # Add any paths that contain templates here, relative to this directory.

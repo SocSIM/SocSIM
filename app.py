@@ -3,15 +3,18 @@ Starts Self-organized criticality
 """
 
 from SOC.models.avalanches.app import MainLoop
+import common 
+import logging
+
+common.log.info("APP")
 
 def run():
     """
     Run MainLoop
     """
-    print("Hello World")
+    common.log.info("STARTED")
     MainLoop(100)
-    print("lalala")
+    common.log.info("FINISHED")
 
 if __name__ == '__main__':
-    print("app")
     run()

@@ -10,7 +10,8 @@
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>socsim</Name>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <InterpreterId>CondaEnv|CondaEnv|miniconda</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -22,6 +23,12 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="common\log.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="common\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="doc\source\conf.py" />
     <Compile Include="SOC\models\avalanches\__init__.py">
       <SubType>Code</SubType>
@@ -53,6 +60,7 @@
     <Folder Include="doc\source\" />
     <Folder Include="doc\source\_static\" />
     <Folder Include="doc\source\_templates\" />
+    <Folder Include="common\" />
     <Folder Include="SOC\models\avalanches\" />
     <Folder Include="SOC\common\" />
     <Folder Include="SOC\" />
@@ -97,6 +105,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="doc\source\index.rst" />
+    <Content Include="doc\source\test.md">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="results\README.md">
       <SubType>Code</SubType>
     </Content>

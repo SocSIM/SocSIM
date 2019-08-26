@@ -1,17 +1,20 @@
 """
-Main Class [SocSim]
+Main Class [SocSim]. 
+This program will run avalanche simulation
 """
 
-from socsim import app
+import app
+import common #initialize logging
+import logging
+
+
+common.log.info("MAIN")
 
 def main():
     """
-    Main function.
+    Avalanche simulation
     """
-    run()
+    app.run()
 
 if __name__ == '__main__':
-    print("main")
     main()
-
-print("not main")
