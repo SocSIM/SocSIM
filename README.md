@@ -1,4 +1,10 @@
-# SocSim
+# Self-Organized Criticality Simulation(SocSim)
+[![Faculty of Physics. University of Warsaw](https://www.fuw.edu.pl/tl_files/downloads/logo_18/FUW_znak-poziomy-EN.png).](https://www.fuw.edu.pl/)  
+
+Project is created as part of subject: [Team student projects Faculty of Physics](https://sites.google.com/a/uw.edu.pl/zps/)
+
+---
+
 Programs in Python that simulates dynamical systems that have a critical point as an attractor. So called [__self-organized criticality__(SOC)](https://en.wikipedia.org/wiki/Self-organized_criticality)
 
 #### Basic goals of project:
@@ -32,6 +38,7 @@ In __Basic goals of project__ are some questions and commitment without solution
 - [ ] How to export/save Jupiter notebooks(to make a posts later)
 - [ ] Rest of todo's goals.
 
+---
 ### 0.2 Commitments
 Here are descibed code formatting style and other conventions, to make code more _uniform_. Also this section is for newcomers and contributors.
 
@@ -48,14 +55,32 @@ TODO: add example how to write test case.
 
 #### Logging
 Logging helps to debug application and also is provided by Python standard library
-[logging](https://docs.python.org/3.9/library/logging.html).    
-TODO: add example how to use logging
+[logging](https://docs.python.org/3.9/library/logging.html). Basic tutorial [here](https://docs.python.org/3.9/howto/logging.html#logging-basic-tutorial).
+
+Usage is very simple:
+```python
+logger.debug('debug message')
+logger.info('info message')
+logger.warning('warn message')
+logger.error('error message')
+logger.critical('critical message')
+```
+
+This will generate:
+```
+2019-06-26 17:27:30,436 - Main   - INFO     - info message
+2019-06-26 17:27:30,437 - Main   - WARNING  - warn message
+2019-06-26 17:27:30,439 - Main   - ERROR    - error message
+2019-06-26 17:27:30,440 - Main   - CRITICAL - critical message
+```
+Output will be printed into console and also into log file(appended): simsoc.log.
+
+TODO(how to reconfigure logger from inside: level for example)
  
 #### Documentation
-Most popular documentation generator for Pyhon - [Sphinx](http://www.sphinx-doc.org/en/master/).   
-TODO: add example how to write documentation comments
+Most popular documentation generator for Python - [Sphinx](http://www.sphinx-doc.org/en/master/). Good tutorial about using Sphinx [here](https://sphinx-tutorial.readthedocs.io/). [Here](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) is exaple of good Google style docstring standardized by PEP-484.
 
-
+---
 ## 1. Theoretical problem description
 [Self-organized criticality wiki](https://en.wikipedia.org/wiki/Self-organized_criticality):   
 In physics, self-organized criticality (SOC) is a property of __dynamical systems__ that have a __critical point__ as an attractor. Their macroscopic behavior thus displays the spatial or temporal scale-invariance characteristic of the critical point of a phase transition, but without the need to tune control parameters to a precise value, because the system, effectively, tunes itself as it evolves towards criticality.
@@ -64,6 +89,7 @@ The concept was put forward by Per Bak, Chao Tang and Kurt Wiesenfeld ("BTW") in
 
 SOC is typically observed in slowly driven non-equilibrium systems with a large number of degrees of freedom and strongly nonlinear dynamics. Many individual examples have been identified since BTW's original paper, but to date there is no known set of general characteristics that guarantee a system will display SOC.
 
+---
 ## 2. Program structure, installation and use cases
 
 ### 2.1 Project folder structure
@@ -100,10 +126,14 @@ TODO
 
 TODO
 
+---
 ## 3. Links/References
-[1]  Bak, P., Tang, C. and Wiesenfeld, K. (1987). "Self-organized criticality: an explanation of 1/f noise". Physical Review Letters. 59 (4): 381–384. Bibcode:1987PhRvL..59..381B. doi:10.1103/PhysRevLett.59.381. PMID 10035754. Papercore summary: http://papercore.org/Bak1987.   
-[2] [Abelian sandpile model](https://en.wikipedia.org/wiki/Abelian_sandpile_model)   
-[3] [Forest-fire model](https://en.wikipedia.org/wiki/Forest-fire_model)   
-[4] [Theoretical Models of Self-Organized Criticality (SOC) Systems](https://arxiv.org/abs/1204.5119)   
-[5] [Pink noise](https://en.wikipedia.org/wiki/Pink_noise)   
-[6] [Introduction to Self-Organized Criticality & Earthquakes](http://www2.econ.iastate.edu/classes/econ308/tesfatsion/SandpileCA.Winslow97.htm)   
+*  Bak, P., Tang, C. and Wiesenfeld, K. (1987). "Self-organized criticality: an explanation of 1/f noise". Physical Review Letters. 59 (4): 381–384. Bibcode:1987PhRvL..59..381B. doi:10.1103/PhysRevLett.59.381. PMID 10035754. Papercore summary: http://papercore.org/Bak1987.   
+* [Abelian sandpile model](https://en.wikipedia.org/wiki/Abelian_sandpile_model)   
+* [Forest-fire model](https://en.wikipedia.org/wiki/Forest-fire_model)   
+* [Theoretical Models of Self-Organized Criticality (SOC) Systems](https://arxiv.org/abs/1204.5119)   
+* [Pink noise](https://en.wikipedia.org/wiki/Pink_noise)   
+* [Introduction to Self-Organized Criticality & Earthquakes](http://www2.econ.iastate.edu/classes/econ308/tesfatsion/SandpileCA.Winslow97.htm)   
+* [25 Years of Self-Organized Criticality: Solar and Astrophysics](https://arxiv.org/pdf/1403.6528.pdf)
+* [SOC computer simulations](https://arxiv.org/abs/1301.2918)
+* [Theoretical Models of SOC Systems](https://arxiv.org/pdf/1204.5119.pdf)
