@@ -77,9 +77,7 @@ def MainLoop(N):
 
         SandFalling(matrix, 1)
 
-    SaveImage(matrix, 'soc'+ str(i) + '.png', 0)
+    SaveImage(matrix, 'soc'+ str(i) + '.png')
     histData, minor = np.histogram(AvalancheCountArray)
-    print(histData)
-    print(AvalancheCountArray)
-    plt.hist(AvalancheCountArray)
-    plt.show()
+    #plt.hist(AvalancheCountArray)
+    #plt.show()

@@ -2,8 +2,8 @@
 Starts Self-organized criticality
 """
 
-from SOC.models.avalanches.app import MainLoop
-import common 
+from SOC.models.avalanches import MainLoop
+import common
 import logging
 
 common.log.info("APP")
