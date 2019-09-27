@@ -90,6 +90,12 @@ TODO(how to reconfigure logger from inside: level for example)
 
 Most popular documentation generator for Python - [Sphinx](http://www.sphinx-doc.org/en/master/). Good tutorial about using Sphinx [here](https://sphinx-tutorial.readthedocs.io/). [Here](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) is exaple of good Google style docstring standardized by PEP-484.
 
+```bash
+pip install -U sphinx
+```
+
+Dependecies of sphinx: recommonmark.
+
 ## 1. Theoretical problem description
 
 [Self-organized criticality wiki](https://en.wikipedia.org/wiki/Self-organized_criticality):   
