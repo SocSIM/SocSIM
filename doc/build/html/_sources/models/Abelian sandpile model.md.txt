@@ -1,1 +1,0 @@
-# Abelian sandpile model
