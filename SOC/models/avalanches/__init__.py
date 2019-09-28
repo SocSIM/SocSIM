@@ -1,20 +1,24 @@
+"""avalanches"""
+
 import numpy as np
 from SOC.common import SaveImage
 
 #returns matrix base with one item in center
 def GetMatrixBase(dim, val = 0):
+    """GetMatrixBase"""
     m = np.ones(dim) * val
     m[int((dim[0] - 1) / 2), int((dim[0] - 1) / 2)] += 1
     return m
 
 #puts new sand item to center of matrix
 def SandFalling(matrix, count = 1):
+    """SandFalling"""
     dim = matrix.shape
     matrix[int((dim[0] - 1) / 2), int((dim[0] - 1) / 2)] += count
 
 
 def OneTimeStepSimulation(matrixOrig):
-    
+    """OneTimeStepSimulation"""
     #avalancheCount = 0
     dim = matrixOrig.shape
     thresholdValue = 4
@@ -58,6 +62,7 @@ def OneTimeStepSimulation(matrixOrig):
 
 
 def MainLoop(N):
+    """MainLoop"""
     AvalancheCountArray = []
 
     #creating of overloaded sand base
@@ -78,6 +83,6 @@ def MainLoop(N):
         SandFalling(matrix, 1)
 
     SaveImage(matrix, 'soc'+ str(i) + '.png')
-    histData, minor = np.histogram(AvalancheCountArray)
+    #histData, minor = np.histogram(AvalancheCountArray)
     #plt.hist(AvalancheCountArray)
     #plt.show()

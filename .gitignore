@@ -332,5 +332,4 @@ ASALocalRun/
 .mfractor/
 
 # Ouptuts of program
-*.png
 /socsim/doc/build

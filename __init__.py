@@ -1,5 +1,5 @@
 """
-SOCSIM INIT
+main init
 """
 
 import app

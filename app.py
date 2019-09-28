@@ -1,5 +1,5 @@
 """
-Starts Self-organized criticality
+Starts Self-organized criticality some loop
 """
 
 from SOC.models.avalanches import MainLoop

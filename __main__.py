@@ -1,8 +1,5 @@
-# this file is invoke when we pass root folder as argument to python
-
 """
-Main Class [SocSim]. 
-This program will run avalanche simulation
+main main
 """
 
 import app
@@ -14,7 +11,15 @@ common.log.info("MAIN")
 
 def main():
     """
-    Avalanche simulation
+    This function does something.
+
+    :param name: The name to use.
+    :type name: str.
+    :param state: Current state to be in.
+    :type state: bool.
+    :returns:  int -- the return code.
+    :raises: AttributeError, KeyError
+
     """
     app.run()
 

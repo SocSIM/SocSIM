@@ -1,14 +1,23 @@
+"""
+test_avalanches.
+
+"""
+
 import sys
 import unittest
+from SOC.models.avalanches import GetMatrixBase
 
-from socsim.avalanches.app import GetMatrixBase
+class BaseMatrixTest(unittest.TestCase):
+    """BaseMatrixTest"""
 
-class BaseMAtrixTest(unittest.TestCase):
     def setUp(self):
-        self.matrix = GetMatrixBase(10, 1);
+        """setUp"""
+        self.matrix = GetMatrixBase(10, 1)
+
     def test_matrix(self):
-        value = self.calc
-        self.assertEqual(calc[0, 0], 1, FAILURE)
+        """test_matrix"""
+        value = self.matrix
+        self.assertEqual(value[0, 0], 1)
 
 
 
