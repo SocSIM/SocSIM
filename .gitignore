@@ -333,3 +333,7 @@ ASALocalRun/
 
 # Ouptuts of program
 docsrc/build
+
+#JUPYTER
+
+*/.ipynb_checkpoints
