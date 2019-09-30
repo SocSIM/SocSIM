@@ -61,4 +61,5 @@ html_static_path = ['_static']
 
 html_logo=''
 html_favicon=''
-html_link_suffix='https://okmechak.github.io/SocSIM'
+
+html_static_path = ['_static']
