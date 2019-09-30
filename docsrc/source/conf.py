@@ -35,7 +35,8 @@ release = '0.0.1'
 extensions = [
     #'rinoh.frontend.sphinx'
     'sphinx.ext.autodoc',
-    'recommonmark'
+    'recommonmark',
+    'sphinx.ext.githubpages'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -61,5 +62,3 @@ html_static_path = ['_static']
 
 html_logo=''
 html_favicon=''
-
-html_static_path = ['_static']
