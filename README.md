@@ -94,8 +94,8 @@ Most popular documentation generator for Python - [Sphinx](http://www.sphinx-doc
 pip install -U sphinx
 pip install sphinx_rtd_theme
 pip install nbsphinx
-[pandoc](https://pandoc.org/installing.html)
 ```
+[pandoc](https://pandoc.org/installing.html)
 
 Dependecies of sphinx: recommonmark.
 
