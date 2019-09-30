@@ -10,6 +10,8 @@ Self-Organized Criticality Simulation (SocSim)
     
     sphinxtest
     AbelianSandpileModel
+    jupyternotebooks
+    StandardWorkflow
 
 SOCSIM program
 --------------
