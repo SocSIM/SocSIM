@@ -1,5 +1,6 @@
 {
     "restructuredtext.linter.disabled": true,
     "restructuredtext.preview.sphinx.disabled": true,
-    "restructuredtext.confPath": "${workspaceFolder}\\doc\\source"
+    "restructuredtext.confPath": "${workspaceFolder}\\doc\\source",
+    "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python37_64\\python.exe"
 }
