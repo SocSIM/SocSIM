@@ -50,11 +50,9 @@ Consider next two style guides:
 + [PEP 8 - Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/)(official Python style guide).      
  TODO: add few examples how code should look like.
  
-#### Unit Tests:
+#### Unit Tests
 
-Python has built-in library for running tests:
-[__unittest__](https://docs.python.org/3/library/unittest.html).   
-TODO: add example how to write test case.
+SocSim uses the lovely [PyTest](https://docs.pytest.org/en/latest/) for its unit testing needs. Tests are run automatically on every commit using TravisCI.
 
 #### Logging
 
