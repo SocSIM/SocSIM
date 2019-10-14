@@ -337,3 +337,7 @@ docsrc/build
 #JUPYTER
 
 */.ipynb_checkpoints
+
+# Environment specific files
+.vscode
+*.sln
