@@ -3,4 +3,5 @@ python:
   - "3.6"      # current default Python on Travis CI
 # command to run tests
 script:
+  - python setup.py develop
   - pytest
