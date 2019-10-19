@@ -1,6 +1,0 @@
-{
-    "restructuredtext.linter.disabled": true,
-    "restructuredtext.preview.sphinx.disabled": true,
-    "restructuredtext.confPath": "${workspaceFolder}\\doc\\source",
-    "python.pythonPath": "C:\\Users\\ofcra\\AppData\\Local\\Programs\\Python\\Python37\\python.exe"
-}

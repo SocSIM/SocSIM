@@ -1,30 +1,28 @@
-# Self-Organized Criticality Simulation(SocSim)
+# Self-Organized Criticality Simulation (SocSim)
 
-[![Faculty of Physics. University of Warsaw](https://www.fuw.edu.pl/tl_files/downloads/logo_18/FUW_znak-poziomy-EN.png)](https://www.fuw.edu.pl/)  
+[![Faculty of Physics. University of Warsaw](https://www.fuw.edu.pl/tl_files/downloads/logo_18/FUW_znak-poziomy-EN.png)](https://www.fuw.edu.pl/)
 
 Project is created as part of subject: [Team student projects Faculty of Physics](https://sites.google.com/a/uw.edu.pl/zps/)
 
-
-
-Programs in Python that simulates dynamical systems that have a critical point as an attractor. So called [__self-organized criticality__(SOC)](https://en.wikipedia.org/wiki/Self-organized_criticality)
+Programs in Python that simulate dynamical systems that have a critical point as an attractor. So called [__self-organized criticality__(SOC)](https://en.wikipedia.org/wiki/Self-organized_criticality)
 
 #### Basic goals of project:
 
-+ Make wide coverage of all self-orfganized cryticality models.
++ Make wide coverage of all self-organized criticality models.
 + Figuring out the best algorithms. 
-   + Easy scalling on many processors machine(multithreading, [GPGPU](https://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units), CUDA). 
+   + Easy scaling on many processors machine(multithreading, [GPGPU](https://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units), CUDA). 
    + Optimal memory usage.
-   + Applying some commmon libraries(Working with tensors etc.).
+   + Applying some common libraries(Working with tensors etc.).
 + Using some best practice of programming:
    + [Coding conventions](https://en.wikipedia.org/wiki/Coding_conventions)
    + Unit Tests.
    + Creation of common modules.
    + Automatic documentation generation.
-   + Readability of code and easy of use(between clearnes and speed, we should choose clearnes).
-+ Input\Output of program. Database of simulations. In other word we should somehow track I/O of program for reproducing or postprocessing of results. And as experience shows it is a 60% of problem. Should we use some databases or immideatly process results and save them in form of posts(like JuPyter or Mathmetica)? Also those "posts" should be on website ot github wiki?    
+   + Readability of code and easy of use(between clarity and speed, we should choose clarity).
++ Input\Output of program. Database of simulations. In other word we should somehow track I/O of program for reproducing or postprocessing of results. And as experience shows it is a 60% of problem. Should we use some databases or immediately process results and save them in form of posts(like Jupyter or Mathematica)? Also those "posts" should be on website or github wiki?    
  
 Advanced topics: 
-+ How we can apply [Keras](https://github.com/keras-team/keras)? Predictions, finding hiden parameters, etc.
++ How we can apply [Keras](https://github.com/keras-team/keras)? Predictions, finding hidden parameters, etc.
 + How about quantum algorithms?
 
 
@@ -42,7 +40,7 @@ In __Basic goals of project__ are some questions and commitment without solution
 
 ### 0.2 Commitments
 
-Here are descibed code formatting style and other conventions, to make code more _uniform_. Also this section is for newcomers and contributors.
+Here are described code formatting style and other conventions, to make code more _uniform_. Also this section is for newcomers and contributors.
 
 #### Code formatting
 
@@ -52,11 +50,9 @@ Consider next two style guides:
 + [PEP 8 - Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/)(official Python style guide).      
  TODO: add few examples how code should look like.
  
-#### Unit Tests:
+#### Unit Tests
 
-Python has built-in library for running tests:
-[__unittest__](https://docs.python.org/3/library/unittest.html).   
-TODO: add example how to write test case.
+SocSim uses the lovely [PyTest](https://docs.pytest.org/en/latest/) for its unit testing needs. Tests are run automatically on every commit using TravisCI.
 
 #### Logging
 
@@ -82,31 +78,31 @@ This will generate:
 2019-06-26 17:27:30,440 - Main   - CRITICAL - critical message
 ```
 
-Output will be printed into console and also into log file(appended): simsoc.log.
+Output will be printed into console and also into log file(appended): `simsoc.log`.
 
 TODO(how to reconfigure logger from inside: level for example)
  
 #### Documentation
 
-Most popular documentation generator for Python - [Sphinx](http://www.sphinx-doc.org/en/master/). Good tutorial about using Sphinx [here](https://sphinx-tutorial.readthedocs.io/). [Here](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) is exaple of good Google style docstring standardized by PEP-484.
+Most popular documentation generator for Python - [Sphinx](http://www.sphinx-doc.org/en/master/). Good tutorial about using Sphinx [here](https://sphinx-tutorial.readthedocs.io/). [Here](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) is example of good Google style docstring standardized by PEP-484.
 
 ```bash
 pip install -U sphinx
 pip install sphinx_rtd_theme
 pip install nbsphinx
-[pandoc](https://pandoc.org/installing.html)
 ```
+[pandoc](https://pandoc.org/installing.html)
 
-Dependecies of sphinx: recommonmark.
+Dependencies of sphinx: `recommonmark`.
 
 ## 1. Theoretical problem description
 
 [Self-organized criticality wiki](https://en.wikipedia.org/wiki/Self-organized_criticality):   
-In physics, self-organized criticality (SOC) is a property of __dynamical systems__ that have a __critical point__ as an attractor. Their macroscopic behavior thus displays the spatial or temporal scale-invariance characteristic of the critical point of a phase transition, but without the need to tune control parameters to a precise value, because the system, effectively, tunes itself as it evolves towards criticality.
+> In physics, self-organized criticality (SOC) is a property of __dynamical systems__ that have a __critical point__ as an attractor. Their macroscopic behavior thus displays the spatial or temporal scale-invariance characteristic of the critical point of a phase transition, but without the need to tune control parameters to a precise value, because the system, effectively, tunes itself as it evolves towards criticality.
 
-The concept was put forward by Per Bak, Chao Tang and Kurt Wiesenfeld ("BTW") in a paper published in 1987 in Physical Review Letters, and is considered to be one of the mechanisms by which complexity arises in nature. Its concepts have been enthusiastically applied across fields as diverse as geophysics, physical cosmology, evolutionary biology and ecology, bio-inspired computing and optimization (mathematics), economics, quantum gravity, sociology, solar physics, plasma physics, neurobiology and others.
+> The concept was put forward by Per Bak, Chao Tang and Kurt Wiesenfeld ("BTW") in a paper published in 1987 in Physical Review Letters, and is considered to be one of the mechanisms by which complexity arises in nature. Its concepts have been enthusiastically applied across fields as diverse as geophysics, physical cosmology, evolutionary biology and ecology, bio-inspired computing and optimization (mathematics), economics, quantum gravity, sociology, solar physics, plasma physics, neurobiology and others.
 
-SOC is typically observed in slowly driven non-equilibrium systems with a large number of degrees of freedom and strongly nonlinear dynamics. Many individual examples have been identified since BTW's original paper, but to date there is no known set of general characteristics that guarantee a system will display SOC.
+> SOC is typically observed in slowly driven non-equilibrium systems with a large number of degrees of freedom and strongly nonlinear dynamics. Many individual examples have been identified since BTW's original paper, but to date there is no known set of general characteristics that guarantee a system will display SOC.
 
 ## 2. Program structure, installation and use cases
 
@@ -123,7 +119,7 @@ Project folder structure is inspired by these sources:
 + __resource__ - Non executable files.
 + __results__ - folder used for holding results of simulation, _Jupiter_ notebooks and different use cases.
 + __SOC__ - main project folder, which holds all source code.
-   + __models__ - contains different SOC models, like: abelian sandpile model, forest-fire model, etc..
+   + __models__ - contains different SOC models, like: Abelian sandpile model, forest-fire model, etc..
    + __common__ - common code between all models
    + __tests__ - unit tests of code
 

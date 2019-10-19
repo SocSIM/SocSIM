@@ -1,32 +1,32 @@
-"""avalanches"""
+"""Avalanches"""
 
 import numpy as np
 from SOC.common import SaveImage
+import tqdm.auto as tqdm
+import numba
 
-#returns matrix base with one item in center
 def GetMatrixBase(dim, val = 0):
-    """GetMatrixBase"""
+    """Return matrix base, with a single sand grain in the middle"""
     m = np.ones(dim) * val
-    m[int((dim[0] - 1) / 2), int((dim[0] - 1) / 2)] += 1
+    SandFalling(m, 1)
     return m
 
-#puts new sand item to center of matrix
 def SandFalling(matrix, count = 1):
-    """SandFalling"""
+    """Drop a new grain on the matrix's center"""
     dim = matrix.shape
     matrix[int((dim[0] - 1) / 2), int((dim[0] - 1) / 2)] += count
 
 
-def OneTimeStepSimulation(matrixOrig):
+@numba.njit
+def OneTimeStepSimulation(matrixOrig, thresholdValue = 4):
     """OneTimeStepSimulation"""
-    #avalancheCount = 0
+    # avalancheCount = 0
     dim = matrixOrig.shape
-    thresholdValue = 4
     	
     for k in range(dim[0] * dim[1]):		
-        #matrix that records differences
-        matrix = np.zeros(matrixOrig.shape)
-        #this flag breakes cycle if there is no more avalanches
+        # matrix that records differences
+        matrix = np.zeros(dim)
+        # this flag breakes cycle if there is no more avalanches
         shouldBreak = True
         for i in range(dim[0]):
             for j in range(dim[1]):
@@ -61,8 +61,20 @@ def OneTimeStepSimulation(matrixOrig):
         matrixOrig += matrix
 
 
-def MainLoop(N):
-    """MainLoop"""
+def MainLoop(N: int, save_every: int = False, plot_histogram: bool  = False):
+    """MainLoop
+
+    Parameters
+    ==========
+    N: int
+        Number of iterations
+    save_every: int or False
+        if not False, save a snapshot of the simulation every `save_every`
+        iterations
+    plot_histogram: bool
+        toggles plotting a histogram at the end of the run
+        
+    """
     AvalancheCountArray = []
 
     #creating of overloaded sand base
@@ -73,7 +85,7 @@ def MainLoop(N):
 
     PrevMatrixTotalCount = np.sum(matrix)
     CurMatrixTotalCount = PrevMatrixTotalCount
-    for i in range(N):
+    for i in tqdm.trange(N):
         OneTimeStepSimulation(matrix)
         
         CurMatrixTotalCount = np.sum(matrix)
@@ -82,7 +94,13 @@ def MainLoop(N):
 
         SandFalling(matrix, 1)
 
-    SaveImage(matrix, 'soc'+ str(i) + '.png')
-    #histData, minor = np.histogram(AvalancheCountArray)
-    #plt.hist(AvalancheCountArray)
-    #plt.show()
+        if save_every and (i % save_every == 0):
+            SaveImage(matrix, f'soc{i:05d}.png')
+    histData, minor = np.histogram(AvalancheCountArray)
+    if plot_histogram:
+        import matplotlib.pyplot as plt
+        plt.hist(AvalancheCountArray)
+        plt.show()
+
+if __name__ == "__main__":
+    MainLoop(10000)
