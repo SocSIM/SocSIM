@@ -341,3 +341,4 @@ docsrc/build
 # Environment specific files
 .vscode
 *.sln
+*.egg-info
