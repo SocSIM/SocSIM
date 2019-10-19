@@ -23,8 +23,7 @@ copyright = '2019, Oleg Kmechak'
 author = 'Oleg Kmechak'
 
 # The full version, including alpha/beta/rc tags
-version = '0.0.1'
-release = '0.0.1'
+version = '0.2.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -62,5 +61,7 @@ html_theme = 'sphinx_rtd_theme'#'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_logo=''
-html_favicon=''
+html_logo = ''
+html_favicon = ''
+
+nbsphinx_allow_directives = True
