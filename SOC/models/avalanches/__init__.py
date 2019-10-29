@@ -96,7 +96,7 @@ def MainLoop(N: int, save_every: int = False, plot_histogram: bool  = False):
 
         if save_every and (i % save_every == 0):
             SaveImage(matrix, f'soc{i:05d}.png')
-    histData, minor = np.histogram(AvalancheCountArray)
+    np.histogram(AvalancheCountArray)
     if plot_histogram:
         import matplotlib.pyplot as plt
         plt.hist(AvalancheCountArray)
