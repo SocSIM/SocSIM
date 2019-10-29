@@ -35,7 +35,7 @@ In __Basic goals of project__ are some questions and commitment without solution
 + [x] How basic python project template looks like?
 + [x] Codding conventions in python.
 + [x] Documentation generation in python.
-+ [x] How to export/save Jupiter notebooks(to make a posts later).
++ [x] How to export/save Jupyom/account/repositoriester notebooks(to make a posts later).
 
 ### 0.2 Commitments
 
