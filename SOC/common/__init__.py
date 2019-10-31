@@ -1,5 +1,5 @@
 """common"""
-from .simulation import Simulation, force_boundary_not_active_inplace
+from .simulation import Simulation, clean_boundary_inplace
 from matplotlib import pyplot as plt
 
 
