@@ -20,6 +20,14 @@ class Simulation:
     def Dissipation(self):     # można zrobić po prostu pierścionek wokół tablicy (L+2, L+2) i wszystkie sumy robić po wewnętrznej 
         raise NotImplementedError
     
+    @classmethod
+    def force_boundary_not_active(cls, array):
+        array[:cls.BOUNDARY_SIZE, :] = False
+        array[-cls.BOUNDARY_SIZE:, :] = False
+        array[:, :cls.BOUNDARY_SIZE] = False
+        array[:, -cls.BOUNDARY_SIZE:] = False
+        return array
+
     def AvalancheLoop(self):
         raise NotImplementedError
 
