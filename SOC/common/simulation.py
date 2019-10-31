@@ -2,6 +2,8 @@ import numpy as np
 from tqdm import auto as tqdm
 
 class Simulation:
+    """Base class for SOC simulations."""
+
     values = NotImplemented
     BOUNDARY_SIZE = 1
     def __init__(self, L):
