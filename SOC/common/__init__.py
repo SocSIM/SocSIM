@@ -1,5 +1,5 @@
 """common"""
-from .simulation import Simulation
+from .simulation import Simulation, force_boundary_not_active
 from matplotlib import pyplot as plt
 
 

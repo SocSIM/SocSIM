@@ -1,5 +1,6 @@
 import numpy as np
 from tqdm import auto as tqdm
+import numba
 
 class Simulation:
     """Base class for SOC simulations."""
@@ -22,11 +23,7 @@ class Simulation:
     
     @classmethod
     def force_boundary_not_active(cls, array):
-        array[:cls.BOUNDARY_SIZE, :] = False
-        array[-cls.BOUNDARY_SIZE:, :] = False
-        array[:, :cls.BOUNDARY_SIZE] = False
-        array[:, -cls.BOUNDARY_SIZE:] = False
-        return array
+        return force_boundary_not_active(array, self.BOUNDARY_SIZE)
 
     def AvalancheLoop(self):
         raise NotImplementedError
@@ -39,4 +36,11 @@ class Simulation:
             data_acquisition[i] = observables
         return data_acquisition
         
+@numba.njit
+def force_boundary_not_active(array, BOUNDARY_SIZE):
+    array[:BOUNDARY_SIZE, :] = False
+    array[-BOUNDARY_SIZE:, :] = False
+    array[:, :BOUNDARY_SIZE] = False
+    array[:, -BOUNDARY_SIZE:] = False
+    return array
 

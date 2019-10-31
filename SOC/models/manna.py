@@ -1,5 +1,7 @@
 from SOC import common
 import numpy as np
+import numba
+import random
 
 class Manna(common.Simulation):
     def __init__(self, L, critical_value: int = 1):
@@ -12,31 +14,38 @@ class Manna(common.Simulation):
         self.values[location] += 1
 
     def Toppling(self):
-        active_sites = self.force_boundary_not_active(self.values > self.critical_value)
-        X, Y = np.where(active_sites)
-        for x, y in np.where(active_sites):
-            self.values[x, y] -= 2
-            for neighbor in range(2):
-                xn = x + np.random.choice([-1, 1])
-                yn = y + np.random.choice([-1, 1])
-                self.values[xn, yn] += 1
-                self.visited[xn, yn] = True
-
-
-        # jak są dwie to rozrzucamy losowo
-        raise NotImplementedError # TODO
+        return Toppling(self.values, self.visited, self.critical_value, self.BOUNDARY_SIZE)
 
     def in_equilibrium(self):
         raise NotImplementedError
 
+    def Dissipation(self):
+        """Does nothing, dissipation is handled by the added boundary strips"""
+        pass
+
     def AvalancheLoop(self):
         number_of_iterations = 0
         self.visited[...] = False
-        while not self.in_equilibrium():
-            self.Toppling()
+        while self.Toppling():
             self.Dissipation()
 
             number_of_iterations += 1
         
-        AvalancheSize = self.visited.sum() # dla Manna
+        AvalancheSize = self.visited.sum()
         return dict(AvalancheSize=AvalancheSize, number_of_iterations=number_of_iterations)
+
+
+@numba.njit
+def Toppling(values, visited, critical_value, BOUNDARY_SIZE):
+    active_sites = common.force_boundary_not_active(values > critical_value, BOUNDARY_SIZE)
+    indices = np.vstack(np.where(active_sites)).T
+    for i in range(len(indices)):
+        index = indices[i]
+        values[index] -= 2
+        neighbors = np.random.choice(np.array((-1, 1)), size=(2, 2)) + index
+        for neighbor in range(2):
+            values[neighbors[neighbor]] += 1
+            visited[neighbors[neighbor]] = True
+
+    return active_sites.sum()
+
