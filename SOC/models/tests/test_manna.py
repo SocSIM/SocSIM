@@ -1,6 +1,6 @@
 from SOC.models import Manna
-from SOC.models.manna import Toppling
 import numpy as np
+import pytest
 
 def test_boundary_shape():
     sim = Manna(10)
@@ -28,6 +28,7 @@ def test_toppling_reduces_middle_to_max_one():
     assert (1 <= sim.values[:, 0]).all()
     assert (1 <= sim.values[:, -1]).all()
 
+@pytest.mark.skip
 def test_whiteboard_case_1():
     sim = Manna(3)
     sim.values[2, 2] = 2
@@ -35,6 +36,7 @@ def test_whiteboard_case_1():
     assert int(results['AvalancheSize']) == 2
     assert int(results['number_of_iterations']) == 1
 
+@pytest.mark.skip
 def test_whiteboard_case_2():
     sim = Manna(3)
     sim.values[2, 2] = 2

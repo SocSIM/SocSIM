@@ -14,8 +14,8 @@ class Manna(common.Simulation):
         for x, y in location:
             self.values[x, y] += 1
 
-    def Toppling(self):
-        return Toppling(self.values, self.visited, self.critical_value, self.BOUNDARY_SIZE)
+    def topple(self):
+        return topple(self.values, self.visited, self.critical_value, self.BOUNDARY_SIZE)
 
     def Dissipation(self):
         """Does nothing, dissipation is handled by the added boundary strips"""
@@ -24,7 +24,7 @@ class Manna(common.Simulation):
     def AvalancheLoop(self):
         number_of_iterations = 0
         self.visited[...] = False
-        while self.Toppling():
+        while self.topple():
             self.Dissipation()
             number_of_iterations += 1
         
@@ -34,7 +34,7 @@ class Manna(common.Simulation):
 _DEBUG = True
 
 @numba.njit
-def Toppling(values, visited, critical_value, BOUNDARY_SIZE):
+def topple(values, visited, critical_value, BOUNDARY_SIZE):
     width, height = values.shape
     active_sites = common.force_boundary_not_active_inplace(values > critical_value, BOUNDARY_SIZE)
     if active_sites.any():

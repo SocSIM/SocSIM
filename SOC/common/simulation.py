@@ -16,7 +16,7 @@ class Simulation:
 
     def drive(self):
         raise NotImplementedError   # definiowane w subklasach 
-    def Toppling(self):
+    def topple(self):
         raise NotImplementedError
     def Dissipation(self):     # można zrobić po prostu pierścionek wokół tablicy (L+2, L+2) i wszystkie sumy robić po wewnętrznej 
         raise NotImplementedError
