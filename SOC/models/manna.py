@@ -17,7 +17,7 @@ class Manna(common.Simulation):
     def topple(self):
         return topple(self.values, self.visited, self.critical_value, self.BOUNDARY_SIZE)
 
-    def Dissipation(self):
+    def dissipate(self):
         """Does nothing, dissipation is handled by the added boundary strips"""
         pass
 
@@ -25,7 +25,7 @@ class Manna(common.Simulation):
         number_of_iterations = 0
         self.visited[...] = False
         while self.topple():
-            self.Dissipation()
+            self.dissipate()
             number_of_iterations += 1
         
         AvalancheSize = self.visited.sum()

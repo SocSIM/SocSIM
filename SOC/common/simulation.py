@@ -18,7 +18,7 @@ class Simulation:
         raise NotImplementedError   # definiowane w subklasach 
     def topple(self):
         raise NotImplementedError
-    def Dissipation(self):     # można zrobić po prostu pierścionek wokół tablicy (L+2, L+2) i wszystkie sumy robić po wewnętrznej 
+    def dissipate(self):     # można zrobić po prostu pierścionek wokół tablicy (L+2, L+2) i wszystkie sumy robić po wewnętrznej 
         raise NotImplementedError
     
     @classmethod
