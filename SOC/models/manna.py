@@ -34,8 +34,9 @@ class Manna(common.Simulation):
         AvalancheSize = self.visited.sum()
         return dict(AvalancheSize=AvalancheSize, number_of_iterations=number_of_iterations)
 
+_DEBUG = True
 
-# @numba.njit
+@numba.njit
 def Toppling(values, visited, critical_value, BOUNDARY_SIZE):
     width, height = values.shape
     active_sites = common.force_boundary_not_active_inplace(values > critical_value, BOUNDARY_SIZE)
@@ -44,14 +45,16 @@ def Toppling(values, visited, critical_value, BOUNDARY_SIZE):
         for i in range(len(indices)):
             index = indices[i]
             x, y = index
-            assert BOUNDARY_SIZE <= x < width
-            assert BOUNDARY_SIZE <= y < width
-            values[index] -= 2
-            assert (values[index] >= 0).all()
+            if _DEBUG:
+                assert BOUNDARY_SIZE <= x < width
+                assert BOUNDARY_SIZE <= y < width
+                assert values[x, y] >= 0
+            values[x, y] -= 2
             neighbors = np.random.choice(np.array((-1, 1)), size=(2, 2)) + index
             for neighbor in range(2):
-                values[neighbors[neighbor]] += 1
-                visited[neighbors[neighbor]] = True
+                x, y = neighbors[neighbor]
+                values[x, y] += 1
+                visited[x, y] = True
         return True
     else:
         return False
