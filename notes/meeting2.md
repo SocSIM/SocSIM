@@ -35,3 +35,4 @@ class Manna(Simulation):
         # jak są dwie to rozrzucamy losowo
 ```
 
+![Zdjęcie by @avocadit](20191031_092258.jpg)
