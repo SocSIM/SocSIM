@@ -9,16 +9,13 @@ class Manna(common.Simulation):
         self.values = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         self.critical_value = critical_value
 
-    def Driving(self, num_particles = 1):
+    def drive(self, num_particles = 1):
         location = np.random.randint(self.BOUNDARY_SIZE, self.L_with_boundary-1, size = (num_particles, 2))
         for x, y in location:
             self.values[x, y] += 1
 
     def Toppling(self):
         return Toppling(self.values, self.visited, self.critical_value, self.BOUNDARY_SIZE)
-
-    def in_equilibrium(self):
-        raise NotImplementedError
 
     def Dissipation(self):
         """Does nothing, dissipation is handled by the added boundary strips"""

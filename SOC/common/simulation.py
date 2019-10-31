@@ -14,9 +14,7 @@ class Simulation:
         self.size = L * L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
 
-    def Initialization(self):
-        raise NotImplementedError
-    def Driving(self):
+    def drive(self):
         raise NotImplementedError   # definiowane w subklasach 
     def Toppling(self):
         raise NotImplementedError
@@ -33,14 +31,16 @@ class Simulation:
     def run(self, N_iterations: int):
         data_acquisition = {}
         for i in tqdm.trange(N_iterations):
-            self.Driving()
+            self.drive()
             observables = self.AvalancheLoop()
             data_acquisition[i] = observables
         return data_acquisition
 
     def plot_state(self):
-        plt.imshow(self.values, interpolation='nearest', cmap='binary')
-        plt.colorbar()
+        fig, ax = plt.subplots()
+        IM = ax.imshow(self.values, interpolation='nearest', cmap='binary')
+        plt.colorbar(IM)
+        return fig
         
 @numba.njit
 def force_boundary_not_active_inplace(array, BOUNDARY_SIZE):
