@@ -1,6 +1,7 @@
 import numpy as np
 from tqdm import auto as tqdm
 import numba
+import matplotlib.pyplot as plt
 
 class Simulation:
     """Base class for SOC simulations."""
@@ -10,6 +11,7 @@ class Simulation:
     def __init__(self, L):
         self.L = L
         self.L_with_boundary = L + 2 * self.BOUNDARY_SIZE
+        self.size = L * L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
 
     def Initialization(self):
@@ -35,9 +37,13 @@ class Simulation:
             observables = self.AvalancheLoop()
             data_acquisition[i] = observables
         return data_acquisition
+
+    def plot_state(self):
+        plt.imshow(self.values, interpolation='nearest', cmap='binary')
+        plt.colorbar()
         
 @numba.njit
-def force_boundary_not_active(array, BOUNDARY_SIZE):
+def force_boundary_not_active_inplace(array, BOUNDARY_SIZE):
     array[:BOUNDARY_SIZE, :] = False
     array[-BOUNDARY_SIZE:, :] = False
     array[:, :BOUNDARY_SIZE] = False

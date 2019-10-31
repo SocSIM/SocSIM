@@ -10,8 +10,9 @@ class Manna(common.Simulation):
         self.critical_value = critical_value
 
     def Driving(self, num_particles = 1):
-        location = np.random.randint(self.BOUNDARY_SIZE, self.L_with_boundary, size = (num_particles, 2))
-        self.values[location] += 1
+        location = np.random.randint(self.BOUNDARY_SIZE, self.L_with_boundary-1, size = (num_particles, 2))
+        for x, y in location:
+            self.values[x, y] += 1
 
     def Toppling(self):
         return Toppling(self.values, self.visited, self.critical_value, self.BOUNDARY_SIZE)
@@ -28,24 +29,30 @@ class Manna(common.Simulation):
         self.visited[...] = False
         while self.Toppling():
             self.Dissipation()
-
             number_of_iterations += 1
         
         AvalancheSize = self.visited.sum()
         return dict(AvalancheSize=AvalancheSize, number_of_iterations=number_of_iterations)
 
 
-@numba.njit
+# @numba.njit
 def Toppling(values, visited, critical_value, BOUNDARY_SIZE):
-    active_sites = common.force_boundary_not_active(values > critical_value, BOUNDARY_SIZE)
-    indices = np.vstack(np.where(active_sites)).T
-    for i in range(len(indices)):
-        index = indices[i]
-        values[index] -= 2
-        neighbors = np.random.choice(np.array((-1, 1)), size=(2, 2)) + index
-        for neighbor in range(2):
-            values[neighbors[neighbor]] += 1
-            visited[neighbors[neighbor]] = True
-
-    return active_sites.sum()
+    width, height = values.shape
+    active_sites = common.force_boundary_not_active_inplace(values > critical_value, BOUNDARY_SIZE)
+    if active_sites.any():
+        indices = np.vstack(np.where(active_sites)).T
+        for i in range(len(indices)):
+            index = indices[i]
+            x, y = index
+            assert BOUNDARY_SIZE <= x < width
+            assert BOUNDARY_SIZE <= y < width
+            values[index] -= 2
+            assert (values[index] >= 0).all()
+            neighbors = np.random.choice(np.array((-1, 1)), size=(2, 2)) + index
+            for neighbor in range(2):
+                values[neighbors[neighbor]] += 1
+                visited[neighbors[neighbor]] = True
+        return True
+    else:
+        return False
 
