@@ -1,9 +1,9 @@
 .. _sphinxtest:
 
 
-################
-reStructuredText
-################
+#################################################################
+Development page: testing of reStructuredText and Sphinx features
+#################################################################
 
 
 Links
