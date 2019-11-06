@@ -113,7 +113,7 @@ Project folder structure is inspired by these sources:
 
 #### socsim:  
 
-+ __doc__ - holds [Sphinx](http://www.sphinx-doc.org/en/master/) scripts used for documentation generation.
++ __docsrc__ - holds [Sphinx](http://www.sphinx-doc.org/en/master/) scripts used for documentation generation.
 + __docs__ - GitHub [configuration folder](https://help.github.com/en/articles/configuring-a-publishing-source-for-github-pages), which holds [web-page](https://okmechak.github.io/socsim/) of project.
 + __resource__ - Non executable files.
 + __results__ - folder used for holding results of simulation, _Jupiter_ notebooks and different use cases.
