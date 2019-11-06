@@ -142,9 +142,13 @@ Program is designed in next way:
 + Framework part - placed under `SOC` folder.
 + Research part - consists of jupyter notebooks(which can be easily deployed to web-page) and is placed under `research folder`
 
+#### Developing the program
+
+use `python setup.py develop` to install a basic set of dependencies and link the package to be importable in your current Python environment.
+
 #### Running test cases
 
-TODO
+Simply use `pytest SOC` to automatically find and execute all existing test cases.
 
 #### Web-page generation
 
