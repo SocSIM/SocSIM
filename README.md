@@ -6,7 +6,7 @@ Project is created as part of subject: [Team student projects Faculty of Physics
 
 Programs in Python that simulate dynamical systems that have a critical point as an attractor. So called [__self-organized criticality__(SOC)](https://en.wikipedia.org/wiki/Self-organized_criticality)
 
-#### Basic goals of project:
+## Basic goals of project:
 
 + Make wide coverage of all self-organized criticality models.
 + Figuring out the best algorithms. 
