@@ -45,7 +45,7 @@ class Manna(common.Simulation):
 
 _DEBUG = True
 
-# @numba.njit
+@numba.njit
 def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, boundary_size: int) -> bool:
     """
     Distribute material from overloaded sites to neighbors.
@@ -65,6 +65,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, boundar
 
     # find a boolean array of active (overloaded) sites
     active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)
+    # odrzucam 
 
 
     if active_sites.any():
@@ -81,13 +82,14 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, boundar
                 assert boundary_size <= y < width
                 assert values[x, y] >= 0
 
-            values[x, y] -= 2
+            values[x, y] -= 2 # zależy od parametru?
 
             # randomly and independently pick two neighbors of the current site
             neighbors = index + np.random.choice(np.array((-1, 1)), # ugly but numba broke otherwise
-                                                 size=(2, 2))
+                                                 size=(2, 2))   # to trzeba poprawić, size = (values[x, y]) przed zmianą; GDYBYŚMY ROBILI NIEABELOWY, TO MOŻE GO ZRÓBMY JAKO INNY MODEL
+            # to byśmy podmieniali gdybyśmy zmieniali model najbliższych sąsiadów
 
-            for j in range(2):
+            for j in range(len(neighbors)):
                 xn, yn = neighbors[j]
                 values[xn, yn] += 1
                 visited[xn, yn] = True

@@ -66,7 +66,7 @@ class Simulation:
 
         :rtype: dict
         """
-        number_of_iterations = 0
+        number_of_iterations = 0 # TODO rename number_of_topples/czas rozsypywania/duration
         self.visited[...] = False
         while self.topple():
             self.dissipate()
@@ -90,12 +90,16 @@ class Simulation:
             data_acquisition[i] = observables
         return data_acquisition
 
-    def plot_state(self):
+    def plot_state(self, with_boundaries = False):
         """
         Plots the current state of the simulation.
         """
         fig, ax = plt.subplots()
-        IM = ax.imshow(self.values, interpolation='nearest')
+        if with_boundaries:
+            values = self.values
+        else:
+            values = self.values[self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE, self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE]
+        IM = ax.imshow(values, interpolation='nearest')
         plt.colorbar(IM)
         return fig
         
