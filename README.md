@@ -171,4 +171,5 @@ If you want to update web-page, copy generated web-page into `/docs` folder.
 + [Introduction to Self-Organized Criticality & Earthquakes](http://www2.econ.iastate.edu/classes/econ308/tesfatsion/SandpileCA.Winslow97.htm)   
 + [25 Years of Self-Organized Criticality: Solar and Astrophysics](https://arxiv.org/pdf/1403.6528.pdf)
 + [SOC computer simulations](https://arxiv.org/abs/1301.2918)
+  + [Studies in self-organized criticality](http://wwwf.imperial.ac.uk/~pruess/publications/thesis_final/thesis_book.pdf)
 + [Theoretical Models of SOC Systems](https://arxiv.org/pdf/1204.5119.pdf)
