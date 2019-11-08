@@ -95,6 +95,13 @@ class Simulation:
         Plots the current state of the simulation.
         """
         fig, ax = plt.subplots()
+        
+        values_on_plot=True
+        if(values_on_plot):
+            for i  in range(self.values.shape[0]):
+                for j in range(self.values.shape[1]):
+                    ax.text(j,i,self.values[i,j], color="w", ha="center", va="center")
+        
         IM = ax.imshow(self.values, interpolation='nearest')
         plt.colorbar(IM)
         return fig
