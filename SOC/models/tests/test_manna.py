@@ -1,7 +1,6 @@
 from SOC.models import Manna
 import numpy as np
 import pytest
-import matplotlib.pyplot as plt
 
 def test_boundary_shape():
     sim = Manna(10,0)
