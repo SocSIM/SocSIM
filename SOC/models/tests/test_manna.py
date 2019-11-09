@@ -10,15 +10,11 @@ def test_boundary_shape():
 
 def test_run_abel():
     sim = Manna(20,0)
-    sim.run(1)
-    sim.plot_state()
-    plt.show()
+    sim.run(2000)
 
 def test_run_nonabel():
     sim = Manna(20,1)
-    sim.run(200)
-    sim.plot_state()
-    plt.show()
+    sim.run(2000)
 
 def test_driving_does_not_pollute_boundary():
     sim = Manna(10,0)

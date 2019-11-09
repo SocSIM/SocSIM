@@ -61,16 +61,16 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, model_v
     :type visited: np.ndarray
     :param critical_value: nodes topple above this value
     :type critical_value: int
+    :param model_variant: 0 by default - abelian, 1 - nonabelian
+    :type model_variant: int
     :param boundary_size: size of boundary for the array
     :type boundary_size: int
     :rtype: bool
     """
 
     # find a boolean array of active (overloaded) sites
-    active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)
+    active_sites = common.clean_boundary_inplace(values > 1, boundary_size)         #@avocadit: warunek values>critical_value u mnie, póki co, uruchamiając run(), nie działa
 
-    print(active_sites)
-    print(values)
     if active_sites.any():
         indices = np.vstack(np.where(active_sites)).T
         # a Nx2 array of integer indices for overloaded sites
@@ -78,25 +78,25 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, model_v
 
         for i in range(N):
             x, y = index = indices[i]
-            
+
             if _DEBUG:
                 width, height = values.shape
                 assert boundary_size <= x < width
                 assert boundary_size <= y < width
                 assert values[x, y] >= 0
-            print(values[x, y])
+
             if(model_variant==0):
                 n_to_distribute = 2           # number of particles to distribute from the active site
                 values[x, y] -= 2
             elif(model_variant==1):
                 n_to_distribute = values[x, y]
                 values[x, y] = 0
-
+            
             # randomly and independently pick neighbors of the current site
             neighbors = index + np.random.choice(np.array((-1, 1)), # ugly but numba broke otherwise
                                                  size=(n_to_distribute, 2))
+
             
-            print(values[x, y], index, neighbors)
             for j in range(len(neighbors)):
                 xn, yn = neighbors[j]
                 values[xn, yn] += 1
