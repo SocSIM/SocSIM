@@ -96,7 +96,7 @@ class Simulation:
         """
         fig, ax = plt.subplots()
         
-        values_on_plot=True
+        values_on_plot=False
         if(values_on_plot):
             for i  in range(self.values.shape[0]):
                 for j in range(self.values.shape[1]):
