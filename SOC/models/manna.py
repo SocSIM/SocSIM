@@ -69,7 +69,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, model_v
     """
 
     # find a boolean array of active (overloaded) sites
-    active_sites = common.clean_boundary_inplace(values > 1, boundary_size)         #@avocadit: warunek values>critical_value u mnie, póki co, uruchamiając run(), nie działa
+    active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)
 
     if active_sites.any():
         indices = np.vstack(np.where(active_sites)).T
@@ -101,6 +101,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, model_v
                 xn, yn = neighbors[j]
                 values[xn, yn] += 1
                 visited[xn, yn] = True
+            
         return True
     else:
         return False # nothing happened, we can stop toppling

@@ -27,8 +27,8 @@ class OFC(common.Simulation):
         Drive the simulation by adding force from the outside.
 
         """
+        #increasing all values by the amount needed by the site with highest value to reach the critical_value
         location_of_max = np.unravel_index(np.argmax(self.values, axis=None), self.values.shape)
-        
         self.values += self.critical_value - self.values[location_of_max]
         
     def topple(self) -> bool:
@@ -68,7 +68,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: float, conse
     """
 
     # find a boolean array of active (overloaded) sites
-    active_sites = common.clean_boundary_inplace(values >= 1., boundary_size)         #najpewniej będzie warunek values>=critical_value
+    active_sites = common.clean_boundary_inplace(values >= critical_value, boundary_size)
 
     if active_sites.any():
         indices = np.vstack(np.where(active_sites)).T
@@ -91,9 +91,9 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: float, conse
                 xn, yn = neighbors[j]
                 values[xn, yn] += conservation_lvl * values[x, y]
                 visited[xn, yn] = True
-
-            values[x, y] = 0.
             
+            values[x, y] = 0.
+    
         return True
     else:
         return False # nothing happened, we can stop toppling
