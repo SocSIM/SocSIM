@@ -66,7 +66,7 @@ class Simulation:
 
         :rtype: dict
         """
-        number_of_iterations = 0
+        number_of_iterations = 0 # TODO rename number_of_topples/czas rozsypywania/duration
         self.visited[...] = False
         while self.topple():
             self.dissipate()
@@ -90,19 +90,25 @@ class Simulation:
             data_acquisition[i] = observables
         return data_acquisition
 
-    def plot_state(self):
+    def plot_state(self, with_boundaries = False):
         """
         Plots the current state of the simulation.
         """
         fig, ax = plt.subplots()
+
+        if with_boundaries:
+            values = self.values
+        else:
+            values = self.values[self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE, self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE]
         
         values_on_plot=False
         if(values_on_plot):
-            for i  in range(self.values.shape[0]):
-                for j in range(self.values.shape[1]):
-                    ax.text(j,i,self.values[i,j], color="w", ha="center", va="center")
+            for i  in range(values.shape[0]):
+                for j in range(values.shape[1]):
+                    ax.text(j,i,values[i,j], color="w", ha="center", va="center")     #trzeba dopracować format, jeśli miałoby być przydatne w prezentowaniu ułamkowych values
         
-        IM = ax.imshow(self.values, interpolation='nearest')
+        IM = ax.imshow(values, interpolation='nearest')
+        
         plt.colorbar(IM)
         return fig
         

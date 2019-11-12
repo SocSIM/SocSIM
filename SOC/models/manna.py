@@ -50,6 +50,7 @@ _DEBUG = True
 
 # @numba.njit
 def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, model_variant: int, boundary_size: int) -> bool:
+
     """
     Distribute material from overloaded sites to neighbors.
 
@@ -70,6 +71,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, model_v
 
     # find a boolean array of active (overloaded) sites
     active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)
+    # odrzucam 
 
     if active_sites.any():
         indices = np.vstack(np.where(active_sites)).T
@@ -95,8 +97,8 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, model_v
             # randomly and independently pick neighbors of the current site
             neighbors = index + np.random.choice(np.array((-1, 1)), # ugly but numba broke otherwise
                                                  size=(n_to_distribute, 2))
+            # to byśmy podmieniali gdybyśmy zmieniali model najbliższych sąsiadów
 
-            
             for j in range(len(neighbors)):
                 xn, yn = neighbors[j]
                 values[xn, yn] += 1
