@@ -8,19 +8,19 @@ import random
 class Manna(common.Simulation):
     """Implements the Manna model."""
     
-    def __init__(self, L: int, critical_value: int = 1, model_variant: int = 0):
+    def __init__(self, L: int, critical_value: int = 1, abelian: bool = True):
         """
         :param L: linear size of lattice, without boundary layers
         :type L: int
         :param critical_value: 1 by default - above this value, nodes start toppling
         :type critical_value: int
-        :param model_variant: 0 by default - abelian, 1 - nonabelian
-        :type model_variant: int
+        :param abelian: True by default - abelian, False - nonabelian
+        :type abelian: bool
         """
         super().__init__(L)
         self.values = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         self.critical_value = critical_value
-        self.model_variant = model_variant
+        self.abelian = abelian
     def drive(self, num_particles: int = 1):
         """
         Drive the simulation by adding particles from the outside.
@@ -40,7 +40,7 @@ class Manna(common.Simulation):
 
         :rtype: bool
         """
-        return topple(self.values, self.visited, self.critical_value, self.model_variant, self.BOUNDARY_SIZE)
+        return topple(self.values, self.visited, self.critical_value, self.abelian, self.BOUNDARY_SIZE)
 
     def dissipate(self):
         """Does nothing, dissipation is handled by the added boundary strips"""
@@ -48,8 +48,8 @@ class Manna(common.Simulation):
 
 _DEBUG = True
 
-# @numba.njit
-def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, model_variant: int, boundary_size: int) -> bool:
+@numba.njit
+def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, abelian: bool, boundary_size: int) -> bool:
 
     """
     Distribute material from overloaded sites to neighbors.
@@ -62,8 +62,8 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, model_v
     :type visited: np.ndarray
     :param critical_value: nodes topple above this value
     :type critical_value: int
-    :param model_variant: 0 by default - abelian, 1 - nonabelian
-    :type model_variant: int
+    :param abelian: True by default - abelian, False - nonabelian
+    :type abelian: bool
     :param boundary_size: size of boundary for the array
     :type boundary_size: int
     :rtype: bool
@@ -87,10 +87,10 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, model_v
                 assert boundary_size <= y < width
                 assert values[x, y] >= 0
 
-            if(model_variant==0):
+            if(abelian):
                 n_to_distribute = 2           # number of particles to distribute from the active site
                 values[x, y] -= 2
-            elif(model_variant==1):
+            else:
                 n_to_distribute = values[x, y]
                 values[x, y] = 0
             
