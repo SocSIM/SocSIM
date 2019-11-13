@@ -87,7 +87,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, abelian
                 assert boundary_size <= y < width
                 assert values[x, y] >= 0
 
-            if(abelian):
+            if abelian:
                 n_to_distribute = 2           # number of particles to distribute from the active site
                 values[x, y] -= 2
             else:
