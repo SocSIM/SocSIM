@@ -363,19 +363,6 @@ Indices and tables
 Autodoc
 ===================
 
-SOC
----
-
-.. automodule:: SOC
-   :members: 
-
-
-SocSim avalance
----------------
-
-.. automodule:: SOC.models.avalanches
-   :members:
-
 SocSIM
 ------
 
