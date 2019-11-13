@@ -366,6 +366,6 @@ Autodoc
 SocSIM
 ------
 
-.. automodule:: socsim
+.. automodule:: SOC
     :members:
     :noindex:
