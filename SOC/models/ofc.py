@@ -1,5 +1,9 @@
 """Implements the OFC model."""
 
+
+# TODO Partial Stress Drop
+# TODO Crack model
+
 from SOC import common
 import numpy as np
 import numba
@@ -21,6 +25,9 @@ class OFC(common.Simulation):
         self.critical_value = critical_value
         self.values = np.random.rand(self.L_with_boundary, self.L_with_boundary) * self.critical_value
         self.conservation_lvl = conservation_lvl
+
+        # TODO trzeba zliczać każdy release!
+        self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         
     def drive(self):
         """
@@ -28,8 +35,11 @@ class OFC(common.Simulation):
 
         """
         #increasing all values by the amount needed by the site with highest value to reach the critical_value
-        location_of_max = np.unravel_index(np.argmax(self.values, axis=None), self.values.shape)
-        self.values += self.critical_value - self.values[location_of_max]
+        max_value = np.max(self.values[self.BC:-self.BC, self.BC:-self.BC])
+        self.values[self.BC:-self.BC, self.BC:-self.BC] += self.critical_value - max_value
+        # TODO MAYBE random loading vs obecnie zrobiony homogeneous loading?
+
+        # TODO lista kandydatów do pękania?
         
     def topple(self) -> bool:
         """
@@ -39,7 +49,7 @@ class OFC(common.Simulation):
 
         :rtype: bool
         """
-        return topple(self.values, self.visited, self.critical_value, self.conservation_lvl, self.BOUNDARY_SIZE)
+        return topple(self.values, self.visited, self.critical_value, self.conservation_lvl, self.BC)
 
     def dissipate(self):
         """Does nothing, dissipation is handled by the added boundary strips"""
@@ -86,6 +96,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: float, conse
 
 
             neighbors = index + np.array([[0, 1], [-1, 0], [1, 0], [0,-1]])
+            # TODO crack model nie wraca do sąsiadów, którzy już releasowali energię
 
             for j in range(len(neighbors)):
                 xn, yn = neighbors[j]
@@ -98,3 +109,4 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: float, conse
     else:
         return False # nothing happened, we can stop toppling
 
+# TODO inna wartość krytyczna na start niż w czasie topplowania jako wariant?

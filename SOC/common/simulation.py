@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 class Simulation:
     """Base class for SOC simulations."""
     values = NotImplemented
-    BOUNDARY_SIZE = 1
+    BOUNDARY_SIZE = BC = 1
     def __init__(self, L: int):
         """
 
