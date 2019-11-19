@@ -2,6 +2,8 @@
 
 [![Faculty of Physics. University of Warsaw](https://www.fuw.edu.pl/tl_files/downloads/logo_18/FUW_znak-poziomy-EN.png)](https://www.fuw.edu.pl/)
 
+[![Documentation Status](https://readthedocs.org/projects/socsim/badge/?version=latest)](https://socsim.readthedocs.io/en/latest/?badge=latest)
+
 Project is created as part of subject: [Team student projects Faculty of Physics](https://sites.google.com/a/uw.edu.pl/zps/)
 
 Programs in Python that simulate dynamical systems that have a critical point as an attractor. So called [__self-organized criticality__(SOC)](https://en.wikipedia.org/wiki/Self-organized_criticality)
@@ -31,11 +33,13 @@ Advanced topics:
 In __Basic goals of project__ are some questions and commitment without solutions, so lets list here some priority list:
 
 + [x] Template of project.
-+ [ ] Make an research of _SOC_ topic.
++ [x] Make an research of _SOC_ topic.
 + [x] How basic python project template looks like?
 + [x] Codding conventions in python.
 + [x] Documentation generation in python.
 + [x] How to export/save Jupyom/account/repositoriester notebooks(to make a posts later).
+
+For more take a look at [Issues](https://github.com/SocSIM/SocSIM/issues)
 
 ### 0.2 Commitments
 
@@ -127,22 +131,37 @@ Project folder structure is inspired by these sources:
 
 #### Dependencies
 
-Probably TensorNetwork, Keras, Sphinx.    
-TODO
+Mostly numerical libraries, visualsation, web page generation etc.
+For whole list take a look at [requirements.txt](requirements.txt)
+
 
 ### 2.3 Use cases
 
 #### Running program
 
-TODO
+Program is designed in next way: 
+
++ Framework part - placed under `SOC` folder.
++ Research part - consists of jupyter notebooks(which can be easily deployed to web-page) and is placed under `research folder`
+
+#### Developing the program
+
+use `python setup.py develop` to install a basic set of dependencies and link the package to be importable in your current Python environment.
 
 #### Running test cases
 
-TODO
+Simply use `pytest SOC` to automatically find and execute all existing test cases.
 
 #### Web-page generation
 
-TODO
+Web page is generated using Sphinx library.
+
+Under terminal enter into `docsrc` folder and type:
+```cmd
+make html
+```
+Web-page will be generated into `./docsrc/build/html` folder.
+If you want to update web-page, copy generated web-page into `/docs` folder.
 
 ## 3. Links/References
 
@@ -154,4 +173,5 @@ TODO
 + [Introduction to Self-Organized Criticality & Earthquakes](http://www2.econ.iastate.edu/classes/econ308/tesfatsion/SandpileCA.Winslow97.htm)   
 + [25 Years of Self-Organized Criticality: Solar and Astrophysics](https://arxiv.org/pdf/1403.6528.pdf)
 + [SOC computer simulations](https://arxiv.org/abs/1301.2918)
+  + [Studies in self-organized criticality](http://wwwf.imperial.ac.uk/~pruess/publications/thesis_final/thesis_book.pdf)
 + [Theoretical Models of SOC Systems](https://arxiv.org/pdf/1204.5119.pdf)

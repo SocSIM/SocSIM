@@ -31,4 +31,4 @@ Self-Organized Criticality Simulation (SocSim)
 SOCSIM program
 --------------
 
-.. automodule:: socsim
+.. automodule:: SOC
