@@ -3,6 +3,8 @@ import numpy as np
 from tqdm import auto as tqdm
 import numba
 import matplotlib.pyplot as plt
+import pandas
+import seaborn
 
 class Simulation:
     """Base class for SOC simulations."""
@@ -18,6 +20,7 @@ class Simulation:
         self.L_with_boundary = L + 2 * self.BOUNDARY_SIZE
         self.size = L * L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
+        self.data_acquisition = []
 
     def drive(self):
         """
@@ -83,12 +86,22 @@ class Simulation:
         :type N_iterations: int
         :rtype: dict
         """
-        data_acquisition = {}
         for i in tqdm.trange(N_iterations):
             self.drive()
             observables = self.AvalancheLoop()
-            data_acquisition[i] = observables
-        return data_acquisition
+            self.data_acquisition.append(observables)
+
+    def plot_histograms(self, filename = None):
+        df = pandas.DataFrame(self.data_acquisition)
+        fig, axes = plt.subplots(len(df.columns))
+        fig.suptitle(self.__class__.__name__)
+        for i, column in enumerate(df.columns):
+            ax = axes[i]
+            seaborn.countplot(x=column, data=df, ax=ax)
+            ax.set_yscale('log')
+        if filename is not None:
+            fig.savefig(filename)
+        plt.show()
 
     def plot_state(self, with_boundaries = False):
         """
