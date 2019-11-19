@@ -1,5 +1,5 @@
 """
-Main Init
+Self-organized criticality Framework
 
 Here can be placed some general description  of SOCSIM program and how to use it.
 
