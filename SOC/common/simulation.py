@@ -43,7 +43,7 @@ class Simulation:
 
         Must be overriden in subclasses.
         """
-        raise NotImplementedError("Your model needs to override the dissipate method!")
+        pass
 
     @classmethod
     def clean_boundary_inplace(cls, array: np.ndarray) -> np.ndarray:
