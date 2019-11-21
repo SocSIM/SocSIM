@@ -23,7 +23,7 @@ extras_require['all'] = list(set(chain(*extras_require.values())))
 
 setup(
     name='SocSIM',
-    version='0.1.0',
+    version='0.2.0',
     description='A simulation of self-organized criticality',
     long_description=long_description,
     long_description_content_type='text/markdown',
