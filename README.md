@@ -149,8 +149,11 @@ Program is designed in next way:
 use `python setup.py develop` to install a basic set of dependencies and link the package to be importable in your current Python environment.
 
 #### Running test cases
-
-Simply use `pytest SOC` to automatically find and execute all existing test cases.
+To make folder SOC an import package, run only once:
+```
+python setup.py develop
+```
+After that, simply use `pytest SOC` to automatically find and execute all existing test cases.
 
 #### Web-page generation
 
