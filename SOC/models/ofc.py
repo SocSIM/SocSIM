@@ -29,14 +29,18 @@ class OFC(common.Simulation):
         # TODO trzeba zliczać każdy release!
         self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         
+        self.critical_value_current = self.critical_value
+        
     def drive(self):
         """
         Drive the simulation by adding force from the outside.
 
         """
-        #increasing all values by the amount needed by the site with highest value to reach the critical_value
+        
+        #temporarily decreasing critical_value to the max_value
         max_value = np.max(self.values[self.BC:-self.BC, self.BC:-self.BC])
-        self.values[self.BC:-self.BC, self.BC:-self.BC] += self.critical_value - max_value
+        self.critical_value_current = max_value
+        
         # TODO MAYBE random loading vs obecnie zrobiony homogeneous loading?
 
         # TODO lista kandydatów do pękania?
@@ -45,11 +49,11 @@ class OFC(common.Simulation):
         """
         Distribute material from overloaded sites to neighbors.
 
-        Convenience wrapper for the numba.njitted `topple` function defined in `manna.py`.
+        Convenience wrapper for the numba.njitted `topple` function defined in `ofc.py`.
 
         :rtype: bool
         """
-        return topple(self.values, self.visited, self.critical_value, self.conservation_lvl, self.BC)
+        return topple(self.values, self.visited, self.critical_value_current, self.critical_value, self.conservation_lvl, self.BC)
 
     def dissipate(self):
         """Does nothing, dissipation is handled by the added boundary strips"""
@@ -57,8 +61,8 @@ class OFC(common.Simulation):
 
 _DEBUG = True
 
-# @numba.njit
-def topple(values: np.ndarray, visited: np.ndarray, critical_value: float, conservation_lvl: float, boundary_size: int) -> bool:
+@numba.njit
+def topple(values: np.ndarray, visited: np.ndarray, critical_value_current: float, critical_value: float, conservation_lvl: float, boundary_size: int) -> bool:
     """
     Distribute material from overloaded sites to neighbors.
 
@@ -78,7 +82,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: float, conse
     """
 
     # find a boolean array of active (overloaded) sites
-    active_sites = common.clean_boundary_inplace(values >= critical_value, boundary_size)
+    active_sites = common.clean_boundary_inplace(values >= critical_value_current, boundary_size)
 
     if active_sites.any():
         indices = np.vstack(np.where(active_sites)).T
@@ -100,10 +104,10 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: float, conse
 
             for j in range(len(neighbors)):
                 xn, yn = neighbors[j]
-                values[xn, yn] += conservation_lvl * values[x, y]
+                values[xn, yn] += conservation_lvl * (values[x, y] - critical_value_current + critical_value)   # Grassberger (1994), eqns (1)
                 visited[xn, yn] = True
             
-            values[x, y] = 0.
+            values[x, y] = critical_value_current - critical_value  # Grassberger (1994), eqns (1)
     
         return True
     else:
