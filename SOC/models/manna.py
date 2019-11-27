@@ -7,17 +7,20 @@ import random
 
 class Manna(common.Simulation):
     """Implements the Manna model."""
-    def __init__(self, L: int, critical_value: int = 1):
+    
+    def __init__(self, L: int, critical_value: int = 1, abelian: bool = True):
         """
         :param L: linear size of lattice, without boundary layers
         :type L: int
         :param critical_value: 1 by default - above this value, nodes start toppling
         :type critical_value: int
+        :param abelian: True by default - abelian, False - nonabelian
+        :type abelian: bool
         """
         super().__init__(L)
         self.values = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         self.critical_value = critical_value
-
+        self.abelian = abelian
     def drive(self, num_particles: int = 1):
         """
         Drive the simulation by adding particles from the outside.
@@ -37,7 +40,7 @@ class Manna(common.Simulation):
 
         :rtype: bool
         """
-        return topple(self.values, self.visited, self.critical_value, self.BOUNDARY_SIZE)
+        return topple(self.values, self.visited, self.critical_value, self.abelian, self.BOUNDARY_SIZE)
 
     def dissipate(self):
         """Does nothing, dissipation is handled by the added boundary strips"""
@@ -46,7 +49,8 @@ class Manna(common.Simulation):
 _DEBUG = True
 
 @numba.njit
-def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, boundary_size: int) -> bool:
+def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, abelian: bool, boundary_size: int) -> bool:
+
     """
     Distribute material from overloaded sites to neighbors.
 
@@ -58,6 +62,8 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, boundar
     :type visited: np.ndarray
     :param critical_value: nodes topple above this value
     :type critical_value: int
+    :param abelian: True by default - abelian, False - nonabelian
+    :type abelian: bool
     :param boundary_size: size of boundary for the array
     :type boundary_size: int
     :rtype: bool
@@ -66,7 +72,6 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, boundar
     # find a boolean array of active (overloaded) sites
     active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)
     # odrzucam 
-
 
     if active_sites.any():
         indices = np.vstack(np.where(active_sites)).T
@@ -82,17 +87,23 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, boundar
                 assert boundary_size <= y < width
                 assert values[x, y] >= 0
 
-            values[x, y] -= 2 # zależy od parametru?
-
-            # randomly and independently pick two neighbors of the current site
+            if abelian:
+                n_to_distribute = 2           # number of particles to distribute from the active site
+                values[x, y] -= 2
+            else:
+                n_to_distribute = values[x, y]
+                values[x, y] = 0
+            
+            # randomly and independently pick neighbors of the current site
             neighbors = index + np.random.choice(np.array((-1, 1)), # ugly but numba broke otherwise
-                                                 size=(2, 2))   # to trzeba poprawić, size = (values[x, y]) przed zmianą; GDYBYŚMY ROBILI NIEABELOWY, TO MOŻE GO ZRÓBMY JAKO INNY MODEL
+                                                 size=(n_to_distribute, 2))
             # to byśmy podmieniali gdybyśmy zmieniali model najbliższych sąsiadów
 
             for j in range(len(neighbors)):
                 xn, yn = neighbors[j]
                 values[xn, yn] += 1
                 visited[xn, yn] = True
+            
         return True
     else:
         return False # nothing happened, we can stop toppling

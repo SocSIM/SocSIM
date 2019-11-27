@@ -9,7 +9,7 @@ import seaborn
 class Simulation:
     """Base class for SOC simulations."""
     values = NotImplemented
-    BOUNDARY_SIZE = 1
+    BOUNDARY_SIZE = BC = 1
     def __init__(self, L: int):
         """
 
@@ -108,11 +108,14 @@ class Simulation:
         Plots the current state of the simulation.
         """
         fig, ax = plt.subplots()
+
         if with_boundaries:
             values = self.values
         else:
             values = self.values[self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE, self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE]
+        
         IM = ax.imshow(values, interpolation='nearest')
+        
         plt.colorbar(IM)
         return fig
         
