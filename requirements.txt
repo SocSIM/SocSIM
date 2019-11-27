@@ -4,3 +4,5 @@ pytest
 tqdm
 sphinx
 numba
+pandas
+seaborn
