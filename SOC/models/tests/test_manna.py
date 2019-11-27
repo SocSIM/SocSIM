@@ -27,11 +27,6 @@ def test_toppling_reduces_middle_to_max_one():
     assert (0 <= sim.values[1:-1, 1:-1]).all()
     assert (sim.values[1:-1, 1:-1] <= 1).all()
 
-    assert (1 <= sim.values[0, :]).all()
-    assert (1 <= sim.values[-1, :]).all()
-    assert (1 <= sim.values[:, 0]).all()
-    assert (1 <= sim.values[:, -1]).all()
-
 @pytest.mark.skip
 def test_whiteboard_case_1():
     sim = Manna(3)

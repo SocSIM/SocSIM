@@ -25,6 +25,7 @@ author = 'Oleg Kmechak'
 # The full version, including alpha/beta/rc tags
 version = '0.2.0'
 
+master_doc = 'index'
 
 # -- General configuration ---------------------------------------------------
 

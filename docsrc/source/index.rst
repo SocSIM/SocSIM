@@ -4,16 +4,31 @@
 Self-Organized Criticality Simulation (SocSim)
 ##############################################
 
+
+
 .. toctree::
     :glob:
-    :caption: Contents
+    :titlesonly:
+    :caption: Readme file content
     
-    sphinxtest
+    README
+
+.. toctree::
+    :glob:
+    :caption: Jupyter notebooks
+    
     AbelianSandpileModel
-    jupyternotebooks
     StandardWorkflow
+    
+.. toctree::
+    :glob:
+    :titlesonly:
+    :caption: Miscelanous (development and testing)
+    
+    jupyternotebooks.rst
+    sphinxtest
 
 SOCSIM program
 --------------
 
-.. automodule:: socsim
+.. automodule:: SOC
