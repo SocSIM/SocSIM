@@ -19,6 +19,8 @@ Self-Organized Criticality Simulation (SocSim)
     
     AbelianSandpileModel
     StandardWorkflow
+    Manna_example
+    OFC
     
 .. toctree::
     :glob:
