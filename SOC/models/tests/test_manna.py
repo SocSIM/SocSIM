@@ -7,9 +7,13 @@ def test_boundary_shape():
     assert sim.values.shape == (12, 12)
     assert sim.L_with_boundary == 12
 
-def test_run():
-    sim = Manna(10)
-    sim.run(1000)
+def test_run_abel():
+    sim = Manna(20)
+    sim.run(2000)
+
+def test_run_nonabel():
+    sim = Manna(20,1,False)
+    sim.run(2000)
 
 def test_driving_does_not_pollute_boundary():
     sim = Manna(10)
