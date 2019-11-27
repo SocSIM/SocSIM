@@ -99,13 +99,16 @@ class Simulation:
     def plot_histograms(self, filename = None):
         df = pandas.DataFrame(self.data_acquisition)
         fig, axes = plt.subplots(len(df.columns))
-        fig.suptitle(self.__class__.__name__)
+        # fig.suptitle(self.__class__.__name__)
         for i, column in enumerate(df.columns):
             ax = axes[i]
-            seaborn.countplot(x=column, data=df, ax=ax)
+            ax.loglog(np.bincount(df[column]), ".")
             ax.set_yscale('log')
+            ax.set_xlabel(column)
+            ax.set_ylabel("count")
         if filename is not None:
             fig.savefig(filename)
+        plt.tight_layout()
         plt.show()
 
     def plot_state(self, with_boundaries = False):
@@ -124,7 +127,7 @@ class Simulation:
         plt.colorbar(IM)
         return fig
 
-    def animate_states(self, with_boundaries = False):
+    def animate_states(self, notebook = False, with_boundaries = False):
         """
         Animates the current state of the animation.
         """
@@ -135,8 +138,6 @@ class Simulation:
         else:
             values = np.dstack(self.saved_snapshots)[self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE, self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE, :]
 
-        print(values.shape)
-        
         IM = ax.imshow(values[:, :, 0],
                        interpolation='nearest',
                        vmin = values.min(),
@@ -157,7 +158,12 @@ class Simulation:
                                        frames=iterations,
                                        interval=30,
                                        )
-        return anim
+        if notebook:
+            from IPython.display import HTML, display
+            plt.close(anim._fig)
+            display(HTML(anim.to_html5_video()))
+        else:
+            return anim
         
 @numba.njit
 def clean_boundary_inplace(array: np.ndarray, boundary_size: int, fill_value = False) -> np.ndarray:
