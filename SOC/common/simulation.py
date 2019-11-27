@@ -3,6 +3,7 @@ import numpy as np
 from tqdm import auto as tqdm
 import numba
 import matplotlib.pyplot as plt
+from matplotlib import animation
 import pandas
 import seaborn
 
@@ -10,7 +11,7 @@ class Simulation:
     """Base class for SOC simulations."""
     values = NotImplemented
     BOUNDARY_SIZE = BC = 1
-    def __init__(self, L: int):
+    def __init__(self, L: int, save_every = 100):#None):
         """
 
         :param L: linear size of lattice, without boundary layers
@@ -21,6 +22,8 @@ class Simulation:
         self.size = L * L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
+        self.saved_snapshots = []
+        self.save_every = save_every
 
     def drive(self):
         """
@@ -90,6 +93,8 @@ class Simulation:
             self.drive()
             observables = self.AvalancheLoop()
             self.data_acquisition.append(observables)
+            if self.save_every is not None and (i % self.save_every) == 0:
+                self.saved_snapshots.append(self.values.copy())
 
     def plot_histograms(self, filename = None):
         df = pandas.DataFrame(self.data_acquisition)
@@ -118,6 +123,41 @@ class Simulation:
         
         plt.colorbar(IM)
         return fig
+
+    def animate_states(self, with_boundaries = False):
+        """
+        Animates the current state of the animation.
+        """
+        fig, ax = plt.subplots()
+
+        if with_boundaries:
+            values = np.dstack(self.saved_snapshots)
+        else:
+            values = np.dstack(self.saved_snapshots)[self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE, self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE, :]
+
+        print(values.shape)
+        
+        IM = ax.imshow(values[:, :, 0],
+                       interpolation='nearest',
+                       vmin = values.min(),
+                       vmax = values.max()
+                       )
+        
+        plt.colorbar(IM)
+        iterations = values.shape[2]
+        title = ax.set_title("Iteration {}/{}".format(0, iterations * self.save_every))
+
+        def animate(i):
+            IM.set_data(values[:,:,i])
+            title.set_text("Iteration {}/{}".format(i * self.save_every, iterations * self.save_every))
+            return IM, title
+
+        anim = animation.FuncAnimation(fig,
+                                       animate,
+                                       frames=iterations,
+                                       interval=30,
+                                       )
+        return anim
         
 @numba.njit
 def clean_boundary_inplace(array: np.ndarray, boundary_size: int, fill_value = False) -> np.ndarray:
