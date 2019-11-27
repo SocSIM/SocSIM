@@ -8,7 +8,7 @@ Project is created as part of subject: [Team student projects Faculty of Physics
 
 Programs in Python that simulate dynamical systems that have a critical point as an attractor. So called [__self-organized criticality__(SOC)](https://en.wikipedia.org/wiki/Self-organized_criticality)
 
-#### Basic goals of project:
+## Basic goals of project:
 
 + Make wide coverage of all self-organized criticality models.
 + Figuring out the best algorithms. 
@@ -117,7 +117,7 @@ Project folder structure is inspired by these sources:
 
 #### socsim:  
 
-+ __doc__ - holds [Sphinx](http://www.sphinx-doc.org/en/master/) scripts used for documentation generation.
++ __docsrc__ - holds [Sphinx](http://www.sphinx-doc.org/en/master/) scripts used for documentation generation.
 + __docs__ - GitHub [configuration folder](https://help.github.com/en/articles/configuring-a-publishing-source-for-github-pages), which holds [web-page](https://okmechak.github.io/socsim/) of project.
 + __resource__ - Non executable files.
 + __results__ - folder used for holding results of simulation, _Jupiter_ notebooks and different use cases.
@@ -149,8 +149,11 @@ Program is designed in next way:
 use `python setup.py develop` to install a basic set of dependencies and link the package to be importable in your current Python environment.
 
 #### Running test cases
-
-Simply use `pytest SOC` to automatically find and execute all existing test cases.
+To make folder SOC an import package, run only once:
+```
+python setup.py develop
+```
+After that, simply use `pytest SOC` to automatically find and execute all existing test cases.
 
 #### Web-page generation
 

@@ -23,7 +23,7 @@ extras_require['all'] = list(set(chain(*extras_require.values())))
 
 setup(
     name='SocSIM',
-    version='0.1.0',
+    version='0.2.0',
     description='A simulation of self-organized criticality',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -32,7 +32,7 @@ setup(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Physics'
-        'License :: OSI Approved :: MIT License',
+        'License :: BSD 3-clause',
         'Programming Language :: Python :: 3.7',
     ],
     keywords='self-organized-criticality sandpile forest-fire simulation',
@@ -55,7 +55,7 @@ setup(
     # },
 
     project_urls={
-        'Bug Reports': 'https://github.com/okmechak/SocSIM/issues',
-        'Source': 'https://github.com/okmechak/SocSIM/',
+        'Bug Reports': 'https://github.com/SocSim/SocSIM/issues',
+        'Source': 'https://github.com/SocSim/SocSIM/',
     },
 )
