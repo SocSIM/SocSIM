@@ -96,7 +96,6 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value_current: floa
                 width, height = values.shape
                 assert boundary_size <= x < width
                 assert boundary_size <= y < width
-                assert values[x, y] >= 0
 
 
             neighbors = index + np.array([[0, 1], [-1, 0], [1, 0], [0,-1]])
