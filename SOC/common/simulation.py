@@ -127,9 +127,15 @@ class Simulation:
         plt.colorbar(IM)
         return fig
 
-    def animate_states(self, notebook = False, with_boundaries = False):
+    def animate_states(self, notebook: bool = False, with_boundaries: bool = False):
         """
-        Animates the current state of the animation.
+        Animates the collected states of the simulation.
+
+        :param notebook: if True, displays via html5 video in a notebook;
+                        otherwise returns MPL animation
+        :type notebook: bool
+        :param with_boundaries: include boundaries in the animation?
+        :type with_boundaries: bool
         """
         fig, ax = plt.subplots()
 
