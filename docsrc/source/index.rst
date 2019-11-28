@@ -17,10 +17,10 @@ Self-Organized Criticality Simulation (SocSim)
     :glob:
     :caption: Jupyter notebooks
     
-    AbelianSandpileModel
     StandardWorkflow
     Manna_example
     OFC
+    BTW
     
 .. toctree::
     :glob:
