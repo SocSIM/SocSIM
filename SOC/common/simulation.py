@@ -11,11 +11,13 @@ class Simulation:
     """Base class for SOC simulations."""
     values = NotImplemented
     BOUNDARY_SIZE = BC = 1
-    def __init__(self, L: int, save_every = 100):#None):
-        """
+    def __init__(self, L: int, save_every: int = 100): # TODO lepsze dorzucanie dodatkowych globalnych parametrów
+        """__init__
 
         :param L: linear size of lattice, without boundary layers
         :type L: int
+        :param save_every: number of iterations per snapshot save
+        :type save_every: int or None
         """
         self.L = L
         self.L_with_boundary = L + 2 * self.BOUNDARY_SIZE
