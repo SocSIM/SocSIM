@@ -22,7 +22,7 @@ class Simulation:
         self.size = L * L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
-        self.saved_snapshots = []
+        self.saved_snapshots = [] # TODO this should probably not be stored in-memory...
         self.save_every = save_every
 
     def drive(self):
@@ -94,7 +94,10 @@ class Simulation:
             observables = self.AvalancheLoop()
             self.data_acquisition.append(observables)
             if self.save_every is not None and (i % self.save_every) == 0:
-                self.saved_snapshots.append(self.values.copy())
+                self._save_snapshot()
+
+    def _save_snapshot(self):
+        self.saved_snapshots.append(self.values.copy())
 
     def plot_histograms(self, filename = None):
         df = pandas.DataFrame(self.data_acquisition)
