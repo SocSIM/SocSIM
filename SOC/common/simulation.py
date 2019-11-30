@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 import pandas
 import seaborn
+from . import analysis
 
 class Simulation:
     """Base class for SOC simulations."""
@@ -101,7 +102,7 @@ class Simulation:
     def _save_snapshot(self):
         self.saved_snapshots.append(self.values.copy())
 
-    def plot_histogram(self, column='AvalancheSize', num=50, filename = None):
+    def plot_histogram(self, column='AvalancheSize', num=50, filename = None, plot = True):
         df = pandas.DataFrame(self.data_acquisition)
         fig, ax = plt.subplots()
         min_range = np.log10(df[column].min()+1)
@@ -116,7 +117,10 @@ class Simulation:
         if filename is not None:
             fig.savefig(filename)
         plt.tight_layout()
-        plt.show()
+        if plot:
+            plt.show()
+        else:
+            plt.close()
         return heights, bins
 
     def plot_state(self, with_boundaries = False):
@@ -178,6 +182,9 @@ class Simulation:
             display(HTML(anim.to_html5_video()))
         else:
             return anim
+    
+    def get_exponent(self, *args, **kwargs):
+        return analysis.get_exponent(self, *args, **kwargs)
         
 @numba.njit
 def clean_boundary_inplace(array: np.ndarray, boundary_size: int, fill_value = False) -> np.ndarray:
