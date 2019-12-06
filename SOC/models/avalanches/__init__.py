@@ -1,7 +1,6 @@
 """Avalanches"""
 
 import numpy as np
-from SOC.common import SaveImage
 import tqdm.auto as tqdm
 import numba
 
@@ -95,7 +94,11 @@ def MainLoop(N: int, save_every: int = False, plot_histogram: bool  = False):
         SandFalling(matrix, 1)
 
         if save_every and (i % save_every == 0):
-            SaveImage(matrix, f'soc{i:05d}.png')
+            cax = plt.imshow(matrix, interpolation = 'nearest')
+            cax.set_clim(vmin = 0, vmax = 4)
+            plt.savefig(f'soc{i:05d}.png', dpi = 100)
+            plt.clf()
+            
     np.histogram(AvalancheCountArray)
     if plot_histogram:
         import matplotlib.pyplot as plt
