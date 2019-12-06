@@ -12,8 +12,6 @@ class BTW(common.Simulation):
         """
         :param L: linear size of lattice, without boundary layers
         :type L: int
-        :param critical_value: 1 by default - above this value, nodes start toppling
-        :type critical_value: int
         """
         super().__init__(L)
         self.d = 2 #lattice dimmension 
