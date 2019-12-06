@@ -55,9 +55,8 @@ class OFC(common.Simulation):
         """
         return topple(self.values, self.visited, self.critical_value_current, self.critical_value, self.conservation_lvl, self.BC)
 
-    def dissipate(self):
-        """Does nothing, dissipation is handled by the added boundary strips"""
-        pass
+    def _save_snapshot(self):
+        self.saved_snapshots.append(self.values - self.critical_value_current)
 
 _DEBUG = True
 

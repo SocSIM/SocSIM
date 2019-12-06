@@ -3,6 +3,7 @@ import numpy as np
 from tqdm import auto as tqdm
 import numba
 import matplotlib.pyplot as plt
+from matplotlib import animation
 import pandas
 import seaborn
 
@@ -10,17 +11,21 @@ class Simulation:
     """Base class for SOC simulations."""
     values = NotImplemented
     BOUNDARY_SIZE = BC = 1
-    def __init__(self, L: int):
-        """
+    def __init__(self, L: int, save_every: int = 100): # TODO lepsze dorzucanie dodatkowych globalnych parametrów
+        """__init__
 
         :param L: linear size of lattice, without boundary layers
         :type L: int
+        :param save_every: number of iterations per snapshot save
+        :type save_every: int or None
         """
         self.L = L
         self.L_with_boundary = L + 2 * self.BOUNDARY_SIZE
         self.size = L * L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
+        self.saved_snapshots = [] # TODO this should probably not be stored in-memory...
+        self.save_every = save_every
 
     def drive(self):
         """
@@ -90,17 +95,25 @@ class Simulation:
             self.drive()
             observables = self.AvalancheLoop()
             self.data_acquisition.append(observables)
+            if self.save_every is not None and (i % self.save_every) == 0:
+                self._save_snapshot()
+
+    def _save_snapshot(self):
+        self.saved_snapshots.append(self.values.copy())
 
     def plot_histograms(self, filename = None):
         df = pandas.DataFrame(self.data_acquisition)
         fig, axes = plt.subplots(len(df.columns))
-        fig.suptitle(self.__class__.__name__)
+        # fig.suptitle(self.__class__.__name__)
         for i, column in enumerate(df.columns):
             ax = axes[i]
-            seaborn.countplot(x=column, data=df, ax=ax)
+            ax.loglog(np.bincount(df[column]), ".")
             ax.set_yscale('log')
+            ax.set_xlabel(column)
+            ax.set_ylabel("count")
         if filename is not None:
             fig.savefig(filename)
+        plt.tight_layout()
         plt.show()
 
     def plot_state(self, with_boundaries = False):
@@ -118,6 +131,50 @@ class Simulation:
         
         plt.colorbar(IM)
         return fig
+
+    def animate_states(self, notebook: bool = False, with_boundaries: bool = False):
+        """
+        Animates the collected states of the simulation.
+
+        :param notebook: if True, displays via html5 video in a notebook;
+                        otherwise returns MPL animation
+        :type notebook: bool
+        :param with_boundaries: include boundaries in the animation?
+        :type with_boundaries: bool
+        """
+        fig, ax = plt.subplots()
+
+        if with_boundaries:
+            values = np.dstack(self.saved_snapshots)
+        else:
+            values = np.dstack(self.saved_snapshots)[self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE, self.BOUNDARY_SIZE:-self.BOUNDARY_SIZE, :]
+
+        IM = ax.imshow(values[:, :, 0],
+                       interpolation='nearest',
+                       vmin = values.min(),
+                       vmax = values.max()
+                       )
+        
+        plt.colorbar(IM)
+        iterations = values.shape[2]
+        title = ax.set_title("Iteration {}/{}".format(0, iterations * self.save_every))
+
+        def animate(i):
+            IM.set_data(values[:,:,i])
+            title.set_text("Iteration {}/{}".format(i * self.save_every, iterations * self.save_every))
+            return IM, title
+
+        anim = animation.FuncAnimation(fig,
+                                       animate,
+                                       frames=iterations,
+                                       interval=30,
+                                       )
+        if notebook:
+            from IPython.display import HTML, display
+            plt.close(anim._fig)
+            display(HTML(anim.to_html5_video()))
+        else:
+            return anim
         
 @numba.njit
 def clean_boundary_inplace(array: np.ndarray, boundary_size: int, fill_value = False) -> np.ndarray:
