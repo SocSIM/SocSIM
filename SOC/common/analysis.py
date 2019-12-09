@@ -73,4 +73,4 @@ def get_exponent(model, hist_num: int = 50, smooth_width: int = 20, d2_cutoff: f
                                        np.log10(heights[finites][ind_min:ind_max]),
                                        1
                                       )
-    return fit.coef[1]
+    return dict(exponent=fit.coef[1], x_data = bin_middles[finites][ind_min:ind_max], y_data=heights[finites][ind_min:ind_max])
