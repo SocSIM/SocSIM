@@ -69,8 +69,8 @@ def get_exponent(model, hist_num: int = 50, smooth_width: int = 20, d2_cutoff: f
         plt.loglog(bin_middles[finites], heights[finites], label="full data")
         plt.loglog(bin_middles[finites][ind_min:ind_max], heights[finites][ind_min:ind_max], label="largest block of small 2nd deriv")
         plt.legend()
-    fit = np.polynomial.Polynomial.fit(bin_middles[finites][ind_min:ind_max],
-                                       heights[finites][ind_min:ind_max],
+    fit = np.polynomial.Polynomial.fit(np.log10(bin_middles[finites][ind_min:ind_max]),
+                                       np.log10(heights[finites][ind_min:ind_max]),
                                        1
                                       )
     return fit.coef[1]
