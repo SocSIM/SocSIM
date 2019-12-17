@@ -25,11 +25,17 @@ class Simulation:
         :type save_every: int or None
         """
         self.L = L
-        self.L_with_boundary = L + 2 * self.BOUNDARY_SIZE
-        self.size = L * L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
         self.save_every = save_every
+
+    @property
+    def size(self):
+        return self.L**2
+
+    @property
+    def L_with_boundary(self):
+        return self.L + 2 * self.BOUNDARY_SIZE
 
     def drive(self):
         """
@@ -208,6 +214,15 @@ class Simulation:
     def get_exponent(self, *args, **kwargs):
         return analysis.get_exponent(self, *args, **kwargs)
 
+    @classmethod
+    def from_file(cls, filename):
+        saved_snapshots = zarr.open(filename)
+        save_every = 1 # TODO find a way
+        L = saved_snapshots.shape[1] - 2 * cls.BOUNDARY_SIZE
+        self = cls(L, save_every)
+        self.values = saved_snapshots[-1]
+        self.saved_snapshots = saved_snapshots
+        return self
         
 @numba.njit
 def clean_boundary_inplace(array: np.ndarray, boundary_size: int, fill_value = False) -> np.ndarray:
