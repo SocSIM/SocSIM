@@ -7,10 +7,14 @@ from matplotlib import animation
 import pandas
 import seaborn
 from . import analysis
+import zarr
+import datetime
 
 class Simulation:
     """Base class for SOC simulations."""
     values = NotImplemented
+    saved_snapshots = NotImplemented
+
     BOUNDARY_SIZE = BC = 1
     def __init__(self, L: int, save_every: int = 100): # TODO lepsze dorzucanie dodatkowych globalnych parametrów
         """__init__
@@ -25,7 +29,6 @@ class Simulation:
         self.size = L * L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
-        self.saved_snapshots = [] # TODO this should probably not be stored in-memory...
         self.save_every = save_every
 
     def drive(self):
@@ -92,15 +95,30 @@ class Simulation:
         :type N_iterations: int
         :rtype: dict
         """
+        arrname = f"array_{self.__class__.__name__}_{datetime.datetime.now().isoformat()}.zarr"
+        self.saved_snapshots = zarr.open(arrname,
+                                         shape=(
+                                             max([N_iterations // self.save_every, 1]),
+                                             self.L_with_boundary,
+                                             self.L_with_boundary,
+                                         ),
+                                         chunks=(
+                                             1,
+                                             self.L_with_boundary,
+                                             self.L_with_boundary,
+                                         ),
+                                         dtype=self.values.dtype,
+                                         )
+
         for i in tqdm.trange(N_iterations):
             self.drive()
             observables = self.AvalancheLoop()
             self.data_acquisition.append(observables)
             if self.save_every is not None and (i % self.save_every) == 0:
-                self._save_snapshot()
+                self._save_snapshot(i)
 
-    def _save_snapshot(self):
-        self.saved_snapshots.append(self.values.copy())
+    def _save_snapshot(self, i):
+        self.saved_snapshots[i // self.save_every] = self.values
 
     def plot_histogram(self, column='AvalancheSize', num=50, filename = None, plot = True):
         df = pandas.DataFrame(self.data_acquisition)
@@ -185,6 +203,7 @@ class Simulation:
     
     def get_exponent(self, *args, **kwargs):
         return analysis.get_exponent(self, *args, **kwargs)
+
         
 @numba.njit
 def clean_boundary_inplace(array: np.ndarray, boundary_size: int, fill_value = False) -> np.ndarray:
