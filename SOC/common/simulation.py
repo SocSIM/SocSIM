@@ -119,6 +119,7 @@ class Simulation:
                                          ),
                                          dtype=self.values.dtype,
                                          )
+        self.saved_snapshots.attrs['save_every'] = self.save_every
 
         for i in tqdm.trange(N_iterations):
             self.drive()
@@ -217,7 +218,7 @@ class Simulation:
     @classmethod
     def from_file(cls, filename):
         saved_snapshots = zarr.open(filename)
-        save_every = 1 # TODO find a way
+        save_every = saved_snapshots.attrs['save_every']
         L = saved_snapshots.shape[1] - 2 * cls.BOUNDARY_SIZE
         self = cls(L, save_every)
         self.values = saved_snapshots[-1]
