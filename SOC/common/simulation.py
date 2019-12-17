@@ -87,16 +87,20 @@ class Simulation:
         AvalancheSize = self.visited.sum()
         return dict(AvalancheSize=AvalancheSize, number_of_iterations=number_of_iterations)
 
-    def run(self, N_iterations: int) -> dict:
+    def run(self, N_iterations: int, filename: str  = None) -> dict:
         """
         Simulation loop. Drives the simulation, possibly starts avalanches, gathers data.
 
         :param N_iterations:
         :type N_iterations: int
         :rtype: dict
+        :param filename: filename for saving snapshots. By default, something like array_Manna_2019-12-17T19:40:00.546426.zarr
+        :type filename: str
         """
-        arrname = f"array_{self.__class__.__name__}_{datetime.datetime.now().isoformat()}.zarr"
-        self.saved_snapshots = zarr.open(arrname,
+        if filename is None:
+            filename = f"array_{self.__class__.__name__}_{datetime.datetime.now().isoformat()}.zarr"
+
+        self.saved_snapshots = zarr.open(filename,
                                          shape=(
                                              max([N_iterations // self.save_every, 1]),
                                              self.L_with_boundary,
