@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 import pandas
 import seaborn
+from . import analysis
 
 class Simulation:
     """Base class for SOC simulations."""
@@ -101,20 +102,26 @@ class Simulation:
     def _save_snapshot(self):
         self.saved_snapshots.append(self.values.copy())
 
-    def plot_histograms(self, filename = None):
+    def plot_histogram(self, column='AvalancheSize', num=50, filename = None, plot = True):
         df = pandas.DataFrame(self.data_acquisition)
-        fig, axes = plt.subplots(len(df.columns))
-        # fig.suptitle(self.__class__.__name__)
-        for i, column in enumerate(df.columns):
-            ax = axes[i]
-            ax.loglog(np.bincount(df[column]), ".")
-            ax.set_yscale('log')
-            ax.set_xlabel(column)
-            ax.set_ylabel("count")
+        fig, ax = plt.subplots()
+        min_range = np.log10(df[column].min()+1)
+        bins = np.logspace(min_range,
+                           np.log10(df[column].max()+1),
+                           num = num)
+        heights, bins, _ = ax.hist(df[column], bins)
+        ax.set_yscale('log')
+        ax.set_xscale('log')
+        ax.set_xlabel(column)
+        ax.set_ylabel("count")
         if filename is not None:
             fig.savefig(filename)
         plt.tight_layout()
-        plt.show()
+        if plot:
+            plt.show()
+        else:
+            plt.close()
+        return heights, bins
 
     def plot_state(self, with_boundaries = False):
         """
@@ -175,6 +182,9 @@ class Simulation:
             display(HTML(anim.to_html5_video()))
         else:
             return anim
+    
+    def get_exponent(self, *args, **kwargs):
+        return analysis.get_exponent(self, *args, **kwargs)
         
 @numba.njit
 def clean_boundary_inplace(array: np.ndarray, boundary_size: int, fill_value = False) -> np.ndarray:
