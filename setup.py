@@ -38,7 +38,7 @@ setup(
     keywords='self-organized-criticality sandpile forest-fire simulation',
     packages=find_packages(exclude=['docs', 'docsrc', 'research', 'resources','results']),
     python_requires='>=3.6',
-    install_requires=['numpy', 'matplotlib', 'tqdm', 'numba'],
+    install_requires=['numpy', 'matplotlib', 'tqdm', 'numba', 'zarr'],
     extras_require=extras_require,
 
     # To provide executable scripts, use entry points in preference to the
