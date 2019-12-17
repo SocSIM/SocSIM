@@ -42,3 +42,24 @@ def test_whiteboard_case_2():
     results = sim.AvalancheLoop()
     assert int(results['AvalancheSize']) == 2
     assert int(results['number_of_iterations']) == 1
+
+def test_resurrect():
+    sim = Manna(10)
+    filename = "test_ressurrect.zarr"
+    sim.run(5000, filename=filename)
+    saved = sim.saved_snapshots[-1].copy()
+    save_every_orig = sim.save_every
+
+    sim2 = Manna.from_file(filename)
+    np.testing.assert_allclose(sim2.values, saved)
+    assert sim2.save_every == save_every_orig
+
+def test_resurrect_default_name():
+    sim = Manna(10)
+    filename = sim.run(5000, filename=False)
+    saved = sim.saved_snapshots[-1].copy()
+    save_every_orig = sim.save_every
+
+    sim2 = Manna.from_file(filename)
+    np.testing.assert_allclose(sim2.values, saved)
+    assert sim2.save_every == save_every_orig

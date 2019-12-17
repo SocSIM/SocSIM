@@ -7,10 +7,14 @@ from matplotlib import animation
 import pandas
 import seaborn
 from . import analysis
+import zarr
+import datetime
 
 class Simulation:
     """Base class for SOC simulations."""
     values = NotImplemented
+    saved_snapshots = NotImplemented
+
     BOUNDARY_SIZE = BC = 1
     def __init__(self, L: int, save_every: int = 100): # TODO lepsze dorzucanie dodatkowych globalnych parametrów
         """__init__
@@ -21,12 +25,17 @@ class Simulation:
         :type save_every: int or None
         """
         self.L = L
-        self.L_with_boundary = L + 2 * self.BOUNDARY_SIZE
-        self.size = L * L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
-        self.saved_snapshots = [] # TODO this should probably not be stored in-memory...
         self.save_every = save_every
+
+    @property
+    def size(self):
+        return self.L**2
+
+    @property
+    def L_with_boundary(self):
+        return self.L + 2 * self.BOUNDARY_SIZE
 
     def drive(self):
         """
@@ -84,23 +93,44 @@ class Simulation:
         AvalancheSize = self.visited.sum()
         return dict(AvalancheSize=AvalancheSize, number_of_iterations=number_of_iterations)
 
-    def run(self, N_iterations: int) -> dict:
+    def run(self, N_iterations: int, filename: str  = None) -> dict:
         """
         Simulation loop. Drives the simulation, possibly starts avalanches, gathers data.
 
         :param N_iterations:
         :type N_iterations: int
         :rtype: dict
+        :param filename: filename for saving snapshots. if None, saves to memory; by default if False, makes something like array_Manna_2019-12-17T19:40:00.546426.zarr
+        :type filename: str
         """
+        if filename is False:
+            filename = f"array_{self.__class__.__name__}_{datetime.datetime.now().isoformat()}.zarr"
+
+        self.saved_snapshots = zarr.open(filename,
+                                         shape=(
+                                             max([N_iterations // self.save_every, 1]),
+                                             self.L_with_boundary,
+                                             self.L_with_boundary,
+                                         ),
+                                         chunks=(
+                                             1,
+                                             self.L_with_boundary,
+                                             self.L_with_boundary,
+                                         ),
+                                         dtype=self.values.dtype,
+                                         )
+        self.saved_snapshots.attrs['save_every'] = self.save_every
+
         for i in tqdm.trange(N_iterations):
             self.drive()
             observables = self.AvalancheLoop()
             self.data_acquisition.append(observables)
             if self.save_every is not None and (i % self.save_every) == 0:
-                self._save_snapshot()
+                self._save_snapshot(i)
+        return filename
 
-    def _save_snapshot(self):
-        self.saved_snapshots.append(self.values.copy())
+    def _save_snapshot(self, i):
+        self.saved_snapshots[i // self.save_every] = self.values
 
     def plot_histogram(self, column='AvalancheSize', num=50, filename = None, plot = True):
         df = pandas.DataFrame(self.data_acquisition)
@@ -185,6 +215,16 @@ class Simulation:
     
     def get_exponent(self, *args, **kwargs):
         return analysis.get_exponent(self, *args, **kwargs)
+
+    @classmethod
+    def from_file(cls, filename):
+        saved_snapshots = zarr.open(filename)
+        save_every = saved_snapshots.attrs['save_every']
+        L = saved_snapshots.shape[1] - 2 * cls.BOUNDARY_SIZE
+        self = cls(L, save_every)
+        self.values = saved_snapshots[-1]
+        self.saved_snapshots = saved_snapshots
+        return self
         
 @numba.njit
 def clean_boundary_inplace(array: np.ndarray, boundary_size: int, fill_value = False) -> np.ndarray:

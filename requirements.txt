@@ -6,3 +6,4 @@ sphinx
 numba
 pandas
 seaborn
+zarr
