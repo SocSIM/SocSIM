@@ -53,3 +53,13 @@ def test_resurrect():
     sim2 = Manna.from_file(filename)
     np.testing.assert_allclose(sim2.values, saved)
     assert sim2.save_every == save_every_orig
+
+def test_resurrect_default_name():
+    sim = Manna(10)
+    filename = sim.run(5000, filename=False)
+    saved = sim.saved_snapshots[-1].copy()
+    save_every_orig = sim.save_every
+
+    sim2 = Manna.from_file(filename)
+    np.testing.assert_allclose(sim2.values, saved)
+    assert sim2.save_every == save_every_orig

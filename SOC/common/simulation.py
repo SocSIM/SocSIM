@@ -100,10 +100,10 @@ class Simulation:
         :param N_iterations:
         :type N_iterations: int
         :rtype: dict
-        :param filename: filename for saving snapshots. By default, something like array_Manna_2019-12-17T19:40:00.546426.zarr
+        :param filename: filename for saving snapshots. if None, saves to memory; by default if False, makes something like array_Manna_2019-12-17T19:40:00.546426.zarr
         :type filename: str
         """
-        if filename is None:
+        if filename is False:
             filename = f"array_{self.__class__.__name__}_{datetime.datetime.now().isoformat()}.zarr"
 
         self.saved_snapshots = zarr.open(filename,
@@ -127,6 +127,7 @@ class Simulation:
             self.data_acquisition.append(observables)
             if self.save_every is not None and (i % self.save_every) == 0:
                 self._save_snapshot(i)
+        return filename
 
     def _save_snapshot(self, i):
         self.saved_snapshots[i // self.save_every] = self.values
