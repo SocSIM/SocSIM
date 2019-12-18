@@ -27,7 +27,6 @@ class Simulation:
         self.data_acquisition = []
         self.saved_snapshots = [] # TODO this should probably not be stored in-memory...
         self.save_every = save_every
-        self.topple_count = []
 
     def drive(self):
         """
