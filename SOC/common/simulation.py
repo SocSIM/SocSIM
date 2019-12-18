@@ -27,6 +27,7 @@ class Simulation:
         self.data_acquisition = []
         self.saved_snapshots = [] # TODO this should probably not be stored in-memory...
         self.save_every = save_every
+        self.topple_count = []
 
     def drive(self):
         """
@@ -77,12 +78,14 @@ class Simulation:
         """
         number_of_iterations = 0 # TODO rename number_of_topples/czas rozsypywania/duration
         self.visited[...] = False
+        self.releases[...] = 0
         while self.topple():
             self.dissipate()
             number_of_iterations += 1
         
         AvalancheSize = self.visited.sum()
-        return dict(AvalancheSize=AvalancheSize, number_of_iterations=number_of_iterations)
+        NumberOfReleases=self.releases.sum()
+        return dict(AvalancheSize=AvalancheSize, NumberOfReleases=NumberOfReleases, number_of_iterations=number_of_iterations)
 
     def run(self, N_iterations: int) -> dict:
         """

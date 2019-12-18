@@ -26,7 +26,7 @@ class OFC(common.Simulation):
         self.values = np.random.rand(self.L_with_boundary, self.L_with_boundary) * self.critical_value
         self.conservation_lvl = conservation_lvl
 
-        # TODO trzeba zliczać każdy release!
+        # zliczanie relaksacji
         self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         
         self.critical_value_current = self.critical_value
@@ -37,7 +37,7 @@ class OFC(common.Simulation):
 
         """
         
-        #temporarily decreasing critical_value to the max_value
+        #decreasing critical_value to the max_value
         max_value = np.max(self.values[self.BC:-self.BC, self.BC:-self.BC])
         self.critical_value_current = max_value
         
@@ -53,7 +53,7 @@ class OFC(common.Simulation):
 
         :rtype: bool
         """
-        return topple(self.values, self.visited, self.critical_value_current, self.critical_value, self.conservation_lvl, self.BC)
+        return topple(self.values, self.visited, self.releases, self.critical_value_current, self.critical_value, self.conservation_lvl, self.BC)
 
     def _save_snapshot(self):
         self.saved_snapshots.append(self.values - self.critical_value_current)
@@ -61,7 +61,7 @@ class OFC(common.Simulation):
 _DEBUG = True
 
 @numba.njit
-def topple(values: np.ndarray, visited: np.ndarray, critical_value_current: float, critical_value: float, conservation_lvl: float, boundary_size: int) -> bool:
+def topple(values: np.ndarray, visited: np.ndarray, releases: np.ndarray, critical_value_current: float, critical_value: float, conservation_lvl: float, boundary_size: int) -> bool:
     """
     Distribute material from overloaded sites to neighbors.
 
@@ -82,12 +82,13 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value_current: floa
 
     # find a boolean array of active (overloaded) sites
     active_sites = common.clean_boundary_inplace(values >= critical_value_current, boundary_size)
+    releases += active_sites
 
     if active_sites.any():
         indices = np.vstack(np.where(active_sites)).T
         # a Nx2 array of integer indices for overloaded sites
         N = indices.shape[0]
-
+        
         for i in range(N):
             x, y = index = indices[i]
 

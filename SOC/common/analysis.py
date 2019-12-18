@@ -44,9 +44,9 @@ def grab_second_deriv(arr,smooth_width: int = 20):
     y_conv = np.convolve(arr, y1, mode="same")
     return y_conv
 
-def get_exponent(model, hist_num: int = 50, smooth_width: int = 20, d2_cutoff: float = 0.3, cutoffs = None, plot=False):
+def get_exponent(model, col='AvalancheSize', hist_num: int = 50, smooth_width: int = 20, d2_cutoff: float = 0.3, cutoffs = None, plot=False):
     assert smooth_width < hist_num
-    heights, bin_edges = model.plot_histogram(num=hist_num, plot = plot)
+    heights, bin_edges = model.plot_histogram(column=col, num=hist_num, plot = plot)
     bin_middles = (bin_edges[1:] + bin_edges[:-1])/2
     if plot:
         plt.figure()
