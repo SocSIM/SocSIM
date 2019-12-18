@@ -25,9 +25,6 @@ class OFC(common.Simulation):
         self.critical_value = critical_value
         self.values = np.random.rand(self.L_with_boundary, self.L_with_boundary) * self.critical_value
         self.conservation_lvl = conservation_lvl
-
-        # zliczanie relaksacji
-        self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         
         self.critical_value_current = self.critical_value
         

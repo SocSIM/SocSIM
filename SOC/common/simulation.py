@@ -27,6 +27,8 @@ class Simulation:
         self.data_acquisition = []
         self.saved_snapshots = [] # TODO this should probably not be stored in-memory...
         self.save_every = save_every
+        # zliczanie relaksacji
+        self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
 
     def drive(self):
         """
