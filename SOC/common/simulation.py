@@ -28,6 +28,8 @@ class Simulation:
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
         self.save_every = save_every
+        # zliczanie relaksacji
+        self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
 
     @property
     def size(self):
@@ -86,12 +88,14 @@ class Simulation:
         """
         number_of_iterations = 0 # TODO rename number_of_topples/czas rozsypywania/duration
         self.visited[...] = False
+        self.releases[...] = 0
         while self.topple():
             self.dissipate()
             number_of_iterations += 1
         
         AvalancheSize = self.visited.sum()
-        return dict(AvalancheSize=AvalancheSize, number_of_iterations=number_of_iterations)
+        NumberOfReleases=self.releases.sum()
+        return dict(AvalancheSize=AvalancheSize, NumberOfReleases=NumberOfReleases, number_of_iterations=number_of_iterations)
 
     def run(self, N_iterations: int, filename: str  = None) -> dict:
         """
