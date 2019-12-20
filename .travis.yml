@@ -8,4 +8,4 @@ before_script:
 script:
   - pytest --cov SOC
 after_success:
-  - coveralls
+  - codecov
