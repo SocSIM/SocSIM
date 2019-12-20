@@ -3,6 +3,10 @@
 [![Faculty of Physics. University of Warsaw](https://www.fuw.edu.pl/tl_files/downloads/logo_18/FUW_znak-poziomy-EN.png)](https://www.fuw.edu.pl/)
 
 [![Documentation Status](https://readthedocs.org/projects/socsim/badge/?version=latest)](https://socsim.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.com/SocSIM/SocSIM.svg?branch=master)](https://travis-ci.com/SocSIM/SocSIM)
+[![codecov](https://codecov.io/gh/SocSIM/SocSIM/branch/master/graph/badge.svg)](https://codecov.io/gh/SocSIM/SocSIM)
+
+
 
 Project is created as part of subject: [Team student projects Faculty of Physics](https://sites.google.com/a/uw.edu.pl/zps/)
 
