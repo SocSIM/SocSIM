@@ -7,3 +7,5 @@ before_script:
   - python setup.py develop
 script:
   - pytest --cov SOC
+after_success:
+  - coveralls
