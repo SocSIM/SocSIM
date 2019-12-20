@@ -2,6 +2,8 @@ language: python
 python:
   - "3.6"      # current default Python on Travis CI
 # command to run tests
-script:
+before_script:
+  - pip install -r requirements-test.txt
   - python setup.py develop
-  - pytest
+script:
+  - pytest --cov SOC
