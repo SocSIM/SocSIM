@@ -16,7 +16,7 @@ class Simulation:
     saved_snapshots = NotImplemented
 
     BOUNDARY_SIZE = BC = 1
-    def __init__(self, L: int, save_every: int = 100): # TODO lepsze dorzucanie dodatkowych globalnych parametrów
+    def __init__(self, L: int, save_every: int = 100):
         """__init__
 
         :param L: linear size of lattice, without boundary layers

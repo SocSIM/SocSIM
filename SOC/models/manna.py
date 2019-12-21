@@ -8,7 +8,7 @@ import random
 class Manna(common.Simulation):
     """Implements the Manna model."""
     
-    def __init__(self, L: int, critical_value: int = 1, abelian: bool = True):
+    def __init__(self, critical_value: int = 1, abelian: bool = True, *args, **kwargs):
         """
         :param L: linear size of lattice, without boundary layers
         :type L: int
@@ -17,7 +17,7 @@ class Manna(common.Simulation):
         :param abelian: True by default - abelian, False - nonabelian
         :type abelian: bool
         """
-        super().__init__(L)
+        super().__init__(*args, **kwargs)
         self.values = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         self.critical_value = critical_value
         self.abelian = abelian
