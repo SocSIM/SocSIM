@@ -216,6 +216,26 @@ class Simulation:
             display(HTML(anim.to_html5_video()))
         else:
             return anim
+
+    def save(self, file_name = 'sim'):
+        """ serialization of object and saving it to file"""
+
+        root = zarr.open_group('state/' + file_name + '.zarr', mode = 'w')
+        values = root.create_dataset('values', shape = (self.L_with_boundary, self.L_with_boundary), chunks = (10, 10), dtype = 'i4')
+        values = zarr.array(self.values)
+        #data_acquisition = root.create_dataset('data_acquisition', shape = (len(self.data_acquisition)), chunks = (1000), dtype = 'i4')
+        #data_acquisition = zarr.array(self.data_acquisition)
+        root.attrs['L'] = self.L
+        root.attrs['save_every'] = self.save_every
+
+        return root
+
+    def open(self, file_name = 'sim'):
+        root = zarr.open_group('state/' + file_name + '.zarr', mode = 'r')
+        self.values = np.array(root['values'][:])
+        #self.data_acquisition = root['data_acquisition'][:]
+        self.L = root.attrs['L']
+        self.save_every = root.attrs['save_every']
     
     def get_exponent(self, *args, **kwargs):
         return analysis.get_exponent(self, *args, **kwargs)
