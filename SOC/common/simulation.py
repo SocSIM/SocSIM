@@ -225,7 +225,7 @@ class Simulation:
         saved_snapshots = zarr.open(filename)
         save_every = saved_snapshots.attrs['save_every']
         L = saved_snapshots.shape[1] - 2 * cls.BOUNDARY_SIZE
-        self = cls(L, save_every)
+        self = cls(L=L, save_every=save_every)
         self.values = saved_snapshots[-1]
         self.saved_snapshots = saved_snapshots
         return self
