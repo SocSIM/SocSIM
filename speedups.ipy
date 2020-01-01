@@ -1,0 +1,7 @@
+import SOC.models
+model = SOC.models.Manna(L=50)
+def profiling():
+    model.run(20000)
+
+%load_ext line_profiler
+%lprun -m SOC -m SOC.models -m SOC.common profiling()
