@@ -32,24 +32,20 @@ class Manna(common.Simulation):
         for x, y in location:
             self.values[x, y] += 1
 
-    def topple(self) -> bool:
+    def topple_dissipate(self) -> bool:
         """
         Distribute material from overloaded sites to neighbors.
 
-        Convenience wrapper for the numba.njitted `topple` function defined in `manna.py`.
+        Convenience wrapper for the numba.njitted `topple_dissipate` function defined in `manna.py`.
 
         :rtype: bool
         """
-        return topple(self.values, self.visited, self.critical_value, self.abelian, self.BOUNDARY_SIZE)
-
-    def dissipate(self):
-        """Does nothing, dissipation is handled by the added boundary strips"""
-        pass
+        return topple_dissipate(self.values, self.visited, self.critical_value, self.abelian, self.BOUNDARY_SIZE)
 
 _DEBUG = True
 
 @numba.njit
-def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, abelian: bool, boundary_size: int) -> bool:
+def topple_dissipate(values: np.ndarray, visited: np.ndarray, critical_value: int, abelian: bool, boundary_size: int) -> bool:
 
     """
     Distribute material from overloaded sites to neighbors.
@@ -69,11 +65,12 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, abelian
     :rtype: bool
     """
 
+    number_of_topple_iterations = 0
     # find a boolean array of active (overloaded) sites
     active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)
     # odrzucam 
 
-    if active_sites.any():
+    while active_sites.any():
         indices = np.vstack(np.where(active_sites)).T
         # a Nx2 array of integer indices for overloaded sites
         N = indices.shape[0]
@@ -104,7 +101,9 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, abelian
                 values[xn, yn] += 1
                 visited[xn, yn] = True
             
-        return True
-    else:
-        return False # nothing happened, we can stop toppling
+        number_of_topple_iterations += 1
+        active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)
+    # dissipate would be here, after the while loop
+    # but it's not necessary so we skip it
+    return number_of_topple_iterations
 
