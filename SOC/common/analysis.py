@@ -2,6 +2,26 @@ import numba
 import matplotlib.pyplot as plt
 import numpy as np
 
+def plot_histogram(df, column='AvalancheSize', num=50, filename = None, plot = True):
+    fig, ax = plt.subplots()
+    min_range = np.log10(df[column].min()+1)
+    bins = np.logspace(min_range,
+                       np.log10(df[column].max()+1),
+                       num = num)
+    heights, bins, _ = ax.hist(df[column], bins)
+    ax.set_yscale('log')
+    ax.set_xscale('log')
+    ax.set_xlabel(column)
+    ax.set_ylabel("count")
+    if filename is not None:
+        fig.savefig(filename)
+    plt.tight_layout()
+    if plot:
+        plt.show()
+    else:
+        plt.close()
+    return heights, bins
+
 @numba.njit
 def find_largest_true_block(arr):
     """
@@ -44,14 +64,17 @@ def grab_second_deriv(arr,smooth_width: int = 20):
     y_conv = np.convolve(arr, y1, mode="same")
     return y_conv
 
-def get_exponent(model, col='AvalancheSize', hist_num: int = 50, smooth_width: int = 20, d2_cutoff: float = 0.3, cutoffs = None, plot=False):
+def get_exponent(df, col='AvalancheSize', hist_num: int = 50, smooth_width: int = 20, d2_cutoff: float = 0.3, cutoffs = None, plot=False, sd_df = None):
     assert smooth_width < hist_num
-    heights, bin_edges = model.plot_histogram(column=col, num=hist_num, plot = plot)
+    heights, bin_edges = plot_histogram(df, column=col, num=hist_num, plot = plot)
     bin_middles = (bin_edges[1:] + bin_edges[:-1])/2
     if plot:
-        plt.figure()
-        plt.semilogy(bin_edges)
-        plt.semilogy(bin_middles)   # to trzeba poprawić - interpolacja zamiast śre
+        if not sd_df:
+            plt.figure()
+            plt.semilogy(bin_edges)
+            plt.semilogy(bin_middles)   # to trzeba poprawić - interpolacja zamiast śre
+        else:
+            raise NotImplementedError("TODO")
         
     finites = heights > 0   # inaczej logarytm umiera w boolach ;)
     
