@@ -8,12 +8,12 @@ import matplotlib.pyplot as plt
 
 class BTW(common.Simulation):
     """Implements the BTW model."""
-    def __init__(self, L: int):
+    def __init__(self, *args, **kwargs):
         """
         :param L: linear size of lattice, without boundary layers
         :type L: int
         """
-        super().__init__(L)
+        super().__init__(*args, **kwargs)
         self.d = 2 #lattice dimmension 
         self.q = 2*self.d #grains amount used at driving 
         self.z_c = self.q #critical slope

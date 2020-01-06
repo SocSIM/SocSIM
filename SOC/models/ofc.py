@@ -12,7 +12,7 @@ import random
 class OFC(common.Simulation):
     """Implements the OFC model."""
     
-    def __init__(self, L: int, critical_value: float = 1., conservation_lvl: float = 0.25):
+    def __init__(self, critical_value: float = 1., conservation_lvl: float = 0.25, *args, **kwargs):
         """
         :param L: linear size of lattice, without boundary layers
         :type L: int
@@ -21,7 +21,7 @@ class OFC(common.Simulation):
         :param conservation_lvl: 0.25 by default - fraction of the force from a toppling site going to its neighbour   # 0.25 -> full force distributed (if 4 neighbours)
         :type conservation_lvl: float
         """
-        super().__init__(L)
+        super().__init__(*args, **kwargs)
         self.critical_value = critical_value
         self.values = np.random.rand(self.L_with_boundary, self.L_with_boundary) * self.critical_value
         self.conservation_lvl = conservation_lvl

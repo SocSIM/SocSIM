@@ -16,7 +16,7 @@ class Simulation:
     saved_snapshots = NotImplemented
 
     BOUNDARY_SIZE = BC = 1
-    def __init__(self, L: int, save_every: int = 100): # TODO lepsze dorzucanie dodatkowych globalnych parametrów
+    def __init__(self, L: int, save_every: int = 100):
         """__init__
 
         :param L: linear size of lattice, without boundary layers
@@ -136,26 +136,12 @@ class Simulation:
     def _save_snapshot(self, i):
         self.saved_snapshots[i // self.save_every] = self.values
 
+    @property
+    def data_df(self):
+        return pandas.DataFrame(self.data_acquisition)
+
     def plot_histogram(self, column='AvalancheSize', num=50, filename = None, plot = True):
-        df = pandas.DataFrame(self.data_acquisition)
-        fig, ax = plt.subplots()
-        min_range = np.log10(df[column].min()+1)
-        bins = np.logspace(min_range,
-                           np.log10(df[column].max()+1),
-                           num = num)
-        heights, bins, _ = ax.hist(df[column], bins)
-        ax.set_yscale('log')
-        ax.set_xscale('log')
-        ax.set_xlabel(column)
-        ax.set_ylabel("count")
-        if filename is not None:
-            fig.savefig(filename)
-        plt.tight_layout()
-        if plot:
-            plt.show()
-        else:
-            plt.close()
-        return heights, bins
+        return analysis.plot_histogram(self.data_df, column, num, filename, plot)
 
     def plot_state(self, with_boundaries = False):
         """
@@ -238,14 +224,14 @@ class Simulation:
         self.save_every = root.attrs['save_every']
     
     def get_exponent(self, *args, **kwargs):
-        return analysis.get_exponent(self, *args, **kwargs)
+        return analysis.get_exponent(self.data_df, *args, **kwargs)
 
     @classmethod
     def from_file(cls, filename):
         saved_snapshots = zarr.open(filename)
         save_every = saved_snapshots.attrs['save_every']
         L = saved_snapshots.shape[1] - 2 * cls.BOUNDARY_SIZE
-        self = cls(L, save_every)
+        self = cls(L=L, save_every=save_every)
         self.values = saved_snapshots[-1]
         self.saved_snapshots = saved_snapshots
         return self

@@ -2,6 +2,28 @@ import numba
 import matplotlib.pyplot as plt
 import numpy as np
 
+def plot_histogram(df, column='AvalancheSize', num=50, filename = None, plot = True):
+    min_range = np.log10(df[column].min()+1)
+    bins = np.logspace(min_range,
+                       np.log10(df[column].max()+1),
+                       num = num)
+    if plot == "pass":
+        fig, ax = plt.subplots()
+        heights, bins, _ = ax.hist(df[column], bins, label="Data (log-uniformly spaced bins)")
+        ax.set_yscale('log')
+        ax.set_xscale('log')
+        ax.set_xlabel(column)
+        ax.set_ylabel("count")
+        if filename is not None:
+            fig.savefig(filename)
+        plt.tight_layout()
+        if plot != "pass":
+            plt.show()
+    else:
+        fig = None
+        heights, bins = np.histogram(df[column], bins)
+    return heights, bins, fig
+
 @numba.njit
 def find_largest_true_block(arr):
     """
@@ -44,15 +66,11 @@ def grab_second_deriv(arr,smooth_width: int = 20):
     y_conv = np.convolve(arr, y1, mode="same")
     return y_conv
 
-def get_exponent(model, col='AvalancheSize', hist_num: int = 50, smooth_width: int = 20, d2_cutoff: float = 0.3, cutoffs = None, plot=False):
+def get_exponent(df, col='AvalancheSize', hist_num: int = 50, smooth_width: int = 20, d2_cutoff: float = 0.3, cutoffs = None, plot=False, sd_df = None):
     assert smooth_width < hist_num
-    heights, bin_edges = model.plot_histogram(column=col, num=hist_num, plot = plot)
+    heights, bin_edges, fig = plot_histogram(df, column=col, num=hist_num, plot = "pass" if plot else False)
     bin_middles = (bin_edges[1:] + bin_edges[:-1])/2
-    if plot:
-        plt.figure()
-        plt.semilogy(bin_edges)
-        plt.semilogy(bin_middles)   # to trzeba poprawić - interpolacja zamiast śre
-        
+    plt.semilogy(bin_middles)   # TODO bin edges ma offset względem bin middles; to trzeba poprawić - interpolacja zamiast średniej?
     finites = heights > 0   # inaczej logarytm umiera w boolach ;)
     
     if cutoffs is None:
@@ -65,10 +83,10 @@ def get_exponent(model, col='AvalancheSize', hist_num: int = 50, smooth_width: i
         
 
     if plot:
-        plt.figure()
-        plt.loglog(bin_middles[finites], heights[finites], label="full data")
-        plt.loglog(bin_middles[finites][ind_min:ind_max], heights[finites][ind_min:ind_max], label="largest block of small 2nd deriv")
-        plt.legend()
+        ax = fig.gca()
+        ax.loglog(bin_middles[finites], heights[finites], label="full data")
+        ax.loglog(bin_middles[finites][ind_min:ind_max], heights[finites][ind_min:ind_max], label="largest block of small 2nd deriv")
+        ax.legend()
     fit = np.polynomial.Polynomial.fit(np.log10(bin_middles[finites][ind_min:ind_max]),
                                        np.log10(heights[finites][ind_min:ind_max]),
                                        1
