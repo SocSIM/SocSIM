@@ -16,7 +16,7 @@ class Simulation:
     saved_snapshots = NotImplemented
 
     BOUNDARY_SIZE = BC = 1
-    def __init__(self, L: int, save_every: int = 100):
+    def __init__(self, L: int, save_every: int = 100, wait_for_n_iters: int = 10):
         """__init__
 
         :param L: linear size of lattice, without boundary layers
@@ -28,6 +28,7 @@ class Simulation:
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
         self.save_every = save_every
+        self.wait_for_n_iters = wait_for_n_iters
         # zliczanie relaksacji
         self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
 
@@ -97,7 +98,7 @@ class Simulation:
         NumberOfReleases=self.releases.sum()
         return dict(AvalancheSize=AvalancheSize, NumberOfReleases=NumberOfReleases, number_of_iterations=number_of_iterations)
 
-    def run(self, N_iterations: int, filename: str  = None) -> dict:
+    def run(self, N_iterations: int, density: float = 0.05, filename: str  = None) -> dict:
         """
         Simulation loop. Drives the simulation, possibly starts avalanches, gathers data.
 
@@ -126,9 +127,10 @@ class Simulation:
         self.saved_snapshots.attrs['save_every'] = self.save_every
 
         for i in tqdm.trange(N_iterations):
-            self.drive()
+            self.drive(density*self.L*self.L)
             observables = self.AvalancheLoop()
-            self.data_acquisition.append(observables)
+            if i >= self.wait_for_n_iters:
+                self.data_acquisition.append(observables)
             if self.save_every is not None and (i % self.save_every) == 0:
                 self._save_snapshot(i)
         return filename
