@@ -126,8 +126,8 @@ class Simulation:
                                          )
         self.saved_snapshots.attrs['save_every'] = self.save_every
 
-        for i in tqdm.trange(N_iterations):
-            self.drive(density*self.L*self.L)
+        for i in tqdm.trange(int(density * self.L * self.L) * N_iterations):
+            self.drive()
             observables = self.AvalancheLoop()
             if i >= self.wait_for_n_iters:
                 self.data_acquisition.append(observables)
