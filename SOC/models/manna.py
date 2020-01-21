@@ -21,6 +21,7 @@ class Manna(common.Simulation):
         self.values = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         self.critical_value = critical_value
         self.abelian = abelian
+
     def drive(self, num_particles: int = 1):
         """
         Drive the simulation by adding particles from the outside.
@@ -89,7 +90,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, abelian
 
             if abelian:
                 n_to_distribute = 2           # number of particles to distribute from the active site
-                values[x, y] -= 2
+                values[x, y] -= n_to_distribute
             else:
                 n_to_distribute = values[x, y]
                 values[x, y] = 0
