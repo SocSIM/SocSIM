@@ -1,4 +1,4 @@
-"""Contains the base class for the simulation."""
+"""Contains the base class for the simulation of abbelian sandpile model."""
 from SOC import common
 import numpy as np
 from tqdm import auto as tqdm
@@ -77,7 +77,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, boundar
     """
 
     # find a boolean array of active (overloaded) sites
-    active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)
+    active_sites = common.clean_boundary_inplace(values >= critical_value, boundary_size)
     # odrzucam 
 
 
@@ -87,7 +87,7 @@ def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, boundar
         N = indices.shape[0]
 
         for i in range(N):
-            x, y = index = indices[i]
+            x, y = indices[i]
 
             values[x, y] -= critical_value # zależy od parametru?
 
