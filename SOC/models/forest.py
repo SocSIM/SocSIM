@@ -50,27 +50,23 @@ class Forest(common.Simulation):
         #Displacement from a cell to its nearest neighbours
 
         # self.new_values[...] = self.values
-        number_burning = (self.values[self.BC:-self.BC, self.BC:-self.BC] == _burning).sum()
-        if i % 3 == 0:
-            # A to T with small probability
-            ash_here = self.values == _ash
+        # A to T with small probability
+        ash_here = self.values == _ash
 
-            probabilities = np.random.random(size=(self.L_with_boundary, self.L_with_boundary))
-            trees_grow_here = probabilities <= self.p
+        probabilities = np.random.random(size=(self.L_with_boundary, self.L_with_boundary))
+        trees_grow_here = probabilities <= self.p
 
-            self.new_values[common.clean_boundary_inplace(trees_grow_here & ash_here, self.BC)] = _tree
-        elif i % 3 == 1:
-            # Trees start burning: T -> B
-            self.new_values[self.values == _tree] = _tree
-            burn_trees(self.new_values, self.values, self.f, self.BC)
-        elif i % 3 == 2:
-            # B to A
-            burning_here = self.values == _burning
-            self.new_values[common.clean_boundary_inplace(burning_here, self.BC)] = _ash
-        else:
-            raise Exception("wtf?")
+        self.new_values[common.clean_boundary_inplace(trees_grow_here & ash_here, self.BC)] = _tree
+        # Trees start burning: T -> B
+        self.new_values[self.values == _tree] = _tree
+        burn_trees(self.new_values, self.values, self.f, self.BC)
+        # B to A
+        burning_here = self.values == _burning
+        self.new_values[common.clean_boundary_inplace(burning_here, self.BC)] = _ash
 
         self.values, self.new_values = self.new_values, self.values
+        self.new_values[...] = 0
+        number_burning = (self.values[self.BC:-self.BC, self.BC:-self.BC] == _burning).sum()
         return number_burning
 
 _neighbours = ((-1,-1), (-1,0), (-1,1), (0,-1), (0, 1), (1,-1), (1,0), (1,1))
