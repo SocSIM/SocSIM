@@ -9,11 +9,11 @@ def test_boundary_shape():
 
 def test_run_abel():
     sim = Manna(L=20)
-    sim.run(2000)
+    sim.run(5)
 
 def test_run_nonabel():
     sim = Manna(L=20, abelian = False)
-    sim.run(2000)
+    sim.run(5)
 
 def test_driving_does_not_pollute_boundary():
     sim = Manna(L=10)
@@ -46,7 +46,7 @@ def test_whiteboard_case_2():
 def test_resurrect():
     sim = Manna(L=10)
     filename = "test_ressurrect.zarr"
-    sim.run(5000, filename=filename)
+    sim.run(5, filename=filename)
     saved = sim.saved_snapshots[-1].copy()
     save_every_orig = sim.save_every
 
@@ -56,7 +56,7 @@ def test_resurrect():
 
 def test_resurrect_default_name():
     sim = Manna(L=10)
-    filename = sim.run(5000, filename=False)
+    filename = sim.run(50, filename=False)
     saved = sim.saved_snapshots[-1].copy()
     save_every_orig = sim.save_every
 

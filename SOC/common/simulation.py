@@ -23,6 +23,10 @@ class Simulation:
         :type L: int
         :param save_every: number of iterations per snapshot save
         :type save_every: int or None
+        :param wait_for_n_iters: wait this many iterations before collecting data
+                                 (lets model thermalize)
+        :type wait_for_n_iters: int
+
         """
         self.L = L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
@@ -98,27 +102,34 @@ class Simulation:
         NumberOfReleases=self.releases.sum()
         return dict(AvalancheSize=AvalancheSize, NumberOfReleases=NumberOfReleases, number_of_iterations=number_of_iterations)
 
-    def run(self, N_iterations: int, density: float = 0.05, filename: str  = None) -> dict:
+    def run(self, N_iterations: int, filename: str  = None, scale : bool = True) -> dict:
         """
         Simulation loop. Drives the simulation, possibly starts avalanches, gathers data.
 
-        :param N_iterations:
+        :param N_iterations: number of iterations (per grid node if `scale` is True)
         :type N_iterations: int
         :rtype: dict
         :param filename: filename for saving snapshots. if None, saves to memory; by default if False, makes something like array_Manna_2019-12-17T19:40:00.546426.zarr
         :type filename: str
+        :param scale: should the program scale the number of iterations by grid size?
+        :type scale: bool
         """
         if filename is False:
             filename = f"array_{self.__class__.__name__}_{datetime.datetime.now().isoformat()}.zarr"
 
+        if scale:
+            scaled_n_iterations = N_iterations * int(self.L**2)
+        else:
+            scaled_n_iterations = N_iterations
+
         self.saved_snapshots = zarr.open(filename,
                                          shape=(
-                                             max([N_iterations // self.save_every, 1]),
-                                             self.L_with_boundary,
-                                             self.L_with_boundary,
+                                             max([scaled_n_iterations // self.save_every, 1]),  # czas
+                                             self.L_with_boundary,                       # x
+                                             self.L_with_boundary,                       # y
                                          ),
                                          chunks=(
-                                             1,
+                                             100,
                                              self.L_with_boundary,
                                              self.L_with_boundary,
                                          ),
@@ -126,7 +137,7 @@ class Simulation:
                                          )
         self.saved_snapshots.attrs['save_every'] = self.save_every
 
-        for i in tqdm.trange(int(density * self.L * self.L) * N_iterations):
+        for i in tqdm.trange(scaled_n_iterations):
             self.drive()
             observables = self.AvalancheLoop()
             if i >= self.wait_for_n_iters:
