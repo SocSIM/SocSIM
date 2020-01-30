@@ -21,6 +21,7 @@ class Manna(common.Simulation):
         self.values = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         self.critical_value = critical_value
         self.abelian = abelian
+
     def drive(self, num_particles: int = 1):
         """
         Drive the simulation by adding particles from the outside.
