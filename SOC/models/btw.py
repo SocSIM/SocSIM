@@ -45,7 +45,7 @@ class BTW(common.Simulation):
                 if self.values[x_ad, y_ad] > val:
                     self.values[x_ad, y_ad] - 1
 
-    def topple_dissipate(self, i) -> bool:
+    def topple_dissipate(self) -> bool:
         """
         Distribute material from overloaded sites to neighbors.
 

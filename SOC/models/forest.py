@@ -39,7 +39,7 @@ class Forest(common.Simulation):
         Does nothing in FF!
         """
 
-    def topple_dissipate(self, i):
+    def topple_dissipate(self):
         """
         Forest burning and turning into ash. 
         

@@ -33,7 +33,7 @@ class Manna(common.Simulation):
         for x, y in location:
             self.values[x, y] += 1
 
-    def topple_dissipate(self, i) -> bool:
+    def topple_dissipate(self) -> bool:
         """
         Distribute material from overloaded sites to neighbors.
 

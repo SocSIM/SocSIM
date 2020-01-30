@@ -42,7 +42,7 @@ class OFC(common.Simulation):
 
         # TODO lista kandydatów do pękania?
         
-    def topple_dissipate(self, i) -> bool:
+    def topple_dissipate(self) -> bool:
         """
         Distribute material from overloaded sites to neighbors.
 
