@@ -18,18 +18,20 @@ class Forest(common.Simulation):
        
         super().__init__(*args, **kwargs)
         self.values = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
-        probabilities = np.random.random(size=(self.L, self.L))
-        trees_here = probabilities <= p
-        self.values[self.BC:self.L_with_boundary - self.BC,
-                    self.BC:self.L_with_boundary - self.BC,
-                    ][trees_here] = _tree
+        # probabilities = np.random.random(size=(self.L, self.L))
+        # trees_here = probabilities <= p
+        # self.values[self.BC:self.L_with_boundary - self.BC,
+        #             self.BC:self.L_with_boundary - self.BC,
+        #             ][trees_here] = _tree
+        self.values = common.clean_boundary_inplace(np.random.choice([_ash, _tree, _burning], self.values.shape, p=[0.99, 0.01, 0]), self.BC)
+        self.new_values = np.zeros_like(self.values)
         self.p = p
         self.f = f
 
-        xi, yi = np.random.randint(self.BC, self.L_with_boundary - self.BC, 2)
-        self.values[self.BC:self.L_with_boundary - self.BC,
-                    self.BC:self.L_with_boundary - self.BC,
-                    ][xi, yi] = _burning
+        # xi, yi = np.random.randint(self.BC, self.L_with_boundary - self.BC, 2)
+        # self.values[self.BC:self.L_with_boundary - self.BC,
+        #             self.BC:self.L_with_boundary - self.BC,
+        #             ][xi, yi] = _burning
 
         
     def drive(self):
@@ -37,7 +39,7 @@ class Forest(common.Simulation):
         Does nothing in FF!
         """
 
-    def topple_dissipate(self):
+    def topple_dissipate(self, i):
         """
         Forest burning and turning into ash. 
         
@@ -47,32 +49,40 @@ class Forest(common.Simulation):
          
         #Displacement from a cell to its nearest neighbours
 
-        # A to T with small probability
-        ash_here = self.values == _ash
+        # self.new_values[...] = self.values
+        number_burning = (self.values[self.BC:-self.BC, self.BC:-self.BC] == _burning).sum()
+        if i % 3 == 0:
+            # A to T with small probability
+            ash_here = self.values == _ash
 
-        probabilities = np.random.random(size=(self.L_with_boundary, self.L_with_boundary))
-        trees_grow_here = probabilities <= self.p
+            probabilities = np.random.random(size=(self.L_with_boundary, self.L_with_boundary))
+            trees_grow_here = probabilities <= self.p
 
-        self.values[common.clean_boundary_inplace(trees_grow_here & ash_here, self.BC)] = _tree
+            self.new_values[common.clean_boundary_inplace(trees_grow_here & ash_here, self.BC)] = _tree
+        elif i % 3 == 1:
+            # Trees start burning: T -> B
+            self.new_values[self.values == _tree] = _tree
+            burn_trees(self.new_values, self.values, self.f, self.BC)
+        elif i % 3 == 2:
+            # B to A
+            burning_here = self.values == _burning
+            self.new_values[common.clean_boundary_inplace(burning_here, self.BC)] = _ash
+        else:
+            raise Exception("wtf?")
 
-        # Trees start burning: T -> B
-        burn_trees(self.values, self.f, self.BC)
-               
-        # B to A
-        burning_here = self.values == _burning
-        self.values[common.clean_boundary_inplace(burning_here, self.BC)] = _ash
-        return (self.values[self.BC:-self.BC, self.BC:-self.BC] == _burning).sum()
+        self.values, self.new_values = self.new_values, self.values
+        return number_burning
 
 _neighbours = ((-1,-1), (-1,0), (-1,1), (0,-1), (0, 1), (1,-1), (1,0), (1,1))
 @numba.njit
-def burn_trees(values, f, BC):
+def burn_trees(new_values, values, f, BC):
     for ix in range(BC, values.shape[0] - BC):
         for iy in range(BC, values.shape[1] - BC):
             if values[ix, iy] == _tree:
                 if np.random.random() <= f:
-                    values[ix,iy] = _burning
+                    new_values[ix,iy] = _burning
                 else:
                     for dx, dy in _neighbours:
                         if values[ix+dx, iy+dy] == _burning:
-                            values[ix,iy] = _burning
+                            new_values[ix,iy] = _burning
                             break

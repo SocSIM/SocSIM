@@ -48,7 +48,7 @@ class Simulation:
         """
         raise NotImplementedError("Your model needs to override the drive method!")
 
-    def topple_dissipate(self):
+    def topple_dissipate(self, i):
         """
         Distribute material from overloaded sites to neighbors.
 
@@ -67,7 +67,7 @@ class Simulation:
         """
         return clean_boundary_inplace(array, self.BOUNDARY_SIZE)
 
-    def AvalancheLoop(self) -> dict:
+    def AvalancheLoop(self, i) -> dict:
         """
         Bring the current simulation's state to equilibrium by repeatedly
         toppling and dissipating.
@@ -79,7 +79,7 @@ class Simulation:
         """
         self.visited[...] = False
         self.releases[...] = 0
-        number_of_iterations = self.topple_dissipate()
+        number_of_iterations = self.topple_dissipate(i)
         
         AvalancheSize = self.visited.sum()
         NumberOfReleases = self.releases.sum()
@@ -128,7 +128,7 @@ class Simulation:
 
         for i in tqdm.trange(scaled_n_iterations):
             self.drive()
-            observables = self.AvalancheLoop()
+            observables = self.AvalancheLoop(i)
             if i >= scaled_wait_for_n_iters:
                 self.data_acquisition.append(observables)
             if self.save_every is not None and (i % self.save_every) == 0:
@@ -161,7 +161,9 @@ class Simulation:
         plt.colorbar(IM)
         return fig
 
-    def animate_states(self, notebook: bool = False, with_boundaries: bool = False):
+    def animate_states(self, notebook: bool = False, with_boundaries: bool = False,
+                       interval = 30,
+                       ):
         """
         Animates the collected states of the simulation.
 
@@ -196,7 +198,7 @@ class Simulation:
         anim = animation.FuncAnimation(fig,
                                        animate,
                                        frames=iterations,
-                                       interval=30,
+                                       interval=interval,
                                        )
         if notebook:
             from IPython.display import HTML, display
