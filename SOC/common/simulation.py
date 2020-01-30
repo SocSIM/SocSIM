@@ -16,7 +16,7 @@ class Simulation:
     saved_snapshots = NotImplemented
 
     BOUNDARY_SIZE = BC = 1
-    def __init__(self, L: int, save_every: int = 1):
+    def __init__(self, L: int, save_every: int = 100, wait_for_n_iters: int = 10):
         """__init__
 
         :param L: linear size of lattice, without boundary layers
@@ -28,6 +28,7 @@ class Simulation:
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
         self.save_every = save_every
+        self.wait_for_n_iters = wait_for_n_iters
         # zliczanie relaksacji
         self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
 
@@ -94,12 +95,11 @@ class Simulation:
             number_of_iterations += 1
         
         AvalancheSize = self.visited.sum()
-        NumberOfReleases=self.releases.sum()
+        NumberOfReleases = self.releases.sum()
         return dict(AvalancheSize=AvalancheSize, NumberOfReleases=NumberOfReleases, number_of_iterations=number_of_iterations)
 
     def run(self, N_iterations: int,
             filename: str  = None,
-            scale : bool = True,
             wait_for_n_iters: int = 10,
             ) -> dict:
 
@@ -111,35 +111,22 @@ class Simulation:
         :rtype: dict
         :param filename: filename for saving snapshots. if None, saves to memory; by default if False, makes something like array_Manna_2019-12-17T19:40:00.546426.zarr
         :type filename: str
-        :param scale: should the program scale the number of iterations by grid size?
-        :type scale: bool
         :param wait_for_n_iters: wait this many iterations before collecting data
                                  (lets model thermalize)
         :type wait_for_n_iters: int
         """
         if filename is False:
             filename = f"array_{self.__class__.__name__}_{datetime.datetime.now().isoformat()}.zarr"
-
-        if scale:
-            scaled_wait_for_n_iters = wait_for_n_iters * int(self.L**2)
-            scaled_n_iterations = N_iterations * int(self.L**2) + scaled_wait_for_n_iters
-        else:
-            scaled_wait_for_n_iters = wait_for_n_iters
-            scaled_n_iterations = N_iterations + scaled_wait_for_n_iters
+        scaled_wait_for_n_iters = wait_for_n_iters
+        scaled_n_iterations = N_iterations + scaled_wait_for_n_iters
+        if scaled_n_iterations % self.save_every != 0:
+            raise ValueError(f"Ensure save_every ({self.save_every}) is a divisor of the total number of iterations ({scaled_n_iterations})")
+        print(f"Waiting for wait_for_n_iters={wait_for_n_iters} iterations before collecting data. This should let the system thermalize.")
 
         total_snapshots = max([scaled_n_iterations // self.save_every, 1])
-        # TODO przypadek scale = False
-        message = f"""
-          Running {scaled_n_iterations} iterations (`N_iterations` = {N_iterations}, scaled by L^2 = {self.L**2}), out of which
-          {scaled_wait_for_n_iters} (`wait_for_n_iters` = {wait_for_n_iters}, scaled) will be skipped so the system can
-          thermalize.
-
-          Saving {total_snapshots} snapshots in total. Control that via
-          `Simulation.save_every` = {self.save_every}."""
-        print(message)
         self.saved_snapshots = zarr.open(filename,
                                          shape=(
-                                             total_snapshots,  # czas
+                                             total_snapshots,                            # czas
                                              self.L_with_boundary,                       # x
                                              self.L_with_boundary,                       # y
                                          ),
@@ -161,7 +148,7 @@ class Simulation:
                 self._save_snapshot(i)
         return filename
 
-    def _save_snapshot(self, i, wait_for_n_iters):
+    def _save_snapshot(self, i):
         self.saved_snapshots[i // self.save_every] = self.values
 
     @property
