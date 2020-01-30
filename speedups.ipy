@@ -1,7 +1,8 @@
 import SOC.models
+from SOC.models import manna
 model = SOC.models.Manna(L=50)
 def profiling():
-    model.run(100000)
+    model.run(1000)
 
 %load_ext line_profiler
-%lprun -m SOC -m SOC.models -m SOC.common profiling()
+%lprun -m SOC -m SOC.models -m SOC.common -m SOC.models.manna profiling()

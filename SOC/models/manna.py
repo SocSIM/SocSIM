@@ -67,11 +67,11 @@ def topple_dissipate(values: np.ndarray, visited: np.ndarray, critical_value: in
 
     number_of_topple_iterations = 0
     # find a boolean array of active (overloaded) sites
-    active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)
+    active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)   # TODO speedup?
     # odrzucam 
 
-    while active_sites.any():
-        indices = np.vstack(np.where(active_sites)).T
+    while active_sites.any():   # TODO speedup?
+        indices = np.vstack(np.where(active_sites)).T   # TODO speedup?
         # a Nx2 array of integer indices for overloaded sites
         N = indices.shape[0]
 
@@ -93,7 +93,7 @@ def topple_dissipate(values: np.ndarray, visited: np.ndarray, critical_value: in
             
             # randomly and independently pick neighbors of the current site
             neighbors = index + np.random.choice(np.array((-1, 1)), # ugly but numba broke otherwise
-                                                 size=(n_to_distribute, 2))
+                                                 size=(n_to_distribute, 2))   # TODO speedup?
             # to byśmy podmieniali gdybyśmy zmieniali model najbliższych sąsiadów
 
             for j in range(len(neighbors)):
