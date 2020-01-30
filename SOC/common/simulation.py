@@ -16,7 +16,7 @@ class Simulation:
     saved_snapshots = NotImplemented
 
     BOUNDARY_SIZE = BC = 1
-    def __init__(self, L: int, save_every: int = 100):
+    def __init__(self, L: int, save_every: int = 1, wait_for_n_iters: int = 10):
         """__init__
 
         :param L: linear size of lattice, without boundary layers
@@ -28,6 +28,7 @@ class Simulation:
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
         self.save_every = save_every
+        self.wait_for_n_iters = wait_for_n_iters
         # zliczanie relaksacji
         self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
 
@@ -81,30 +82,43 @@ class Simulation:
         number_of_iterations = self.topple_dissipate()
         
         AvalancheSize = self.visited.sum()
-        NumberOfReleases=self.releases.sum()
+        NumberOfReleases = self.releases.sum()
         return dict(AvalancheSize=AvalancheSize, NumberOfReleases=NumberOfReleases, number_of_iterations=number_of_iterations)
 
-    def run(self, N_iterations: int, filename: str  = None) -> dict:
+    def run(self, N_iterations: int,
+            filename: str  = None,
+            wait_for_n_iters: int = 10,
+            ) -> dict:
+
         """
         Simulation loop. Drives the simulation, possibly starts avalanches, gathers data.
 
-        :param N_iterations:
+        :param N_iterations: number of iterations (per grid node if `scale` is True)
         :type N_iterations: int
         :rtype: dict
         :param filename: filename for saving snapshots. if None, saves to memory; by default if False, makes something like array_Manna_2019-12-17T19:40:00.546426.zarr
         :type filename: str
+        :param wait_for_n_iters: wait this many iterations before collecting data
+                                 (lets model thermalize)
+        :type wait_for_n_iters: int
         """
         if filename is False:
             filename = f"array_{self.__class__.__name__}_{datetime.datetime.now().isoformat()}.zarr"
+        scaled_wait_for_n_iters = wait_for_n_iters
+        scaled_n_iterations = N_iterations + scaled_wait_for_n_iters
+        if scaled_n_iterations % self.save_every != 0:
+            raise ValueError(f"Ensure save_every ({self.save_every}) is a divisor of the total number of iterations ({scaled_n_iterations})")
+        print(f"Waiting for wait_for_n_iters={wait_for_n_iters} iterations before collecting data. This should let the system thermalize.")
 
+        total_snapshots = max([scaled_n_iterations // self.save_every, 1])
         self.saved_snapshots = zarr.open(filename,
                                          shape=(
-                                             max([N_iterations // self.save_every, 1]),
-                                             self.L_with_boundary,
-                                             self.L_with_boundary,
+                                             total_snapshots,                            # czas
+                                             self.L_with_boundary,                       # x
+                                             self.L_with_boundary,                       # y
                                          ),
                                          chunks=(
-                                             1,
+                                             100,
                                              self.L_with_boundary,
                                              self.L_with_boundary,
                                          ),
@@ -112,10 +126,11 @@ class Simulation:
                                          )
         self.saved_snapshots.attrs['save_every'] = self.save_every
 
-        for i in tqdm.trange(N_iterations):
+        for i in tqdm.trange(scaled_n_iterations):
             self.drive()
             observables = self.AvalancheLoop()
-            self.data_acquisition.append(observables)
+            if i >= scaled_wait_for_n_iters:
+                self.data_acquisition.append(observables)
             if self.save_every is not None and (i % self.save_every) == 0:
                 self._save_snapshot(i)
         return filename
@@ -146,7 +161,9 @@ class Simulation:
         plt.colorbar(IM)
         return fig
 
-    def animate_states(self, notebook: bool = False, with_boundaries: bool = False):
+    def animate_states(self, notebook: bool = False, with_boundaries: bool = False,
+                       interval = 30,
+                       ):
         """
         Animates the collected states of the simulation.
 
@@ -181,7 +198,7 @@ class Simulation:
         anim = animation.FuncAnimation(fig,
                                        animate,
                                        frames=iterations,
-                                       interval=30,
+                                       interval=interval,
                                        )
         if notebook:
             from IPython.display import HTML, display
