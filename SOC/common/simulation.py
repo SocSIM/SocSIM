@@ -48,23 +48,13 @@ class Simulation:
         """
         raise NotImplementedError("Your model needs to override the drive method!")
 
-    def topple(self):
+    def topple_dissipate(self):
         """
         Distribute material from overloaded sites to neighbors.
 
         Must be overriden in subclasses.
         """
         raise NotImplementedError("Your model needs to override the topple method!")
-
-    def dissipate(self):
-        """
-        Handle losing material at boundaries.
-
-        This may be removed in the future.
-
-        Must be overriden in subclasses.
-        """
-        pass
 
     @classmethod
     def clean_boundary_inplace(cls, array: np.ndarray) -> np.ndarray:
@@ -87,12 +77,9 @@ class Simulation:
 
         :rtype: dict
         """
-        number_of_iterations = 0 # TODO rename number_of_topples/czas rozsypywania/duration
         self.visited[...] = False
         self.releases[...] = 0
-        while self.topple():
-            self.dissipate()
-            number_of_iterations += 1
+        number_of_iterations = self.topple_dissipate()
         
         AvalancheSize = self.visited.sum()
         NumberOfReleases = self.releases.sum()
