@@ -65,3 +65,4 @@ class Forest(common.Simulation):
         # B to A
         burning_here = self.values == _burning
         self.values[common.clean_boundary_inplace(burning_here, self.BC)] = _ash
+        return (self.values[self.BC:-self.BC, self.BC:-self.BC] == _burning).sum()
