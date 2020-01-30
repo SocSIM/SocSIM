@@ -17,54 +17,57 @@ class Forest(common.Simulation)
     #The initial fraction of the forest occupied by trees
     fraction = 0.3
       
-    def __init__(self, p: float = 0.05, f: float = 0.001, *args, **kwargs)
+    def __init__(self, *args, **kwargs)
         """
-        :param L: linear size of lattice without boundaries
-        :type L: int
-        :param p: probability of a new tree growh per empty cell
-        :type p: float
-        :param f: probability of a lightning strike
-        :type f: float
         """
        
         super().__init__(*args, **kwargs)
-        self.p = p
-        self.f = f
+        self.values = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
         
-
-    #Initializing the forest grid
-    def create(self.L_with_boundary)
-        forest_before = np.zeros(self.L_with_boundary, self.L_with_boundary)
         # I kinda assume here boundary = 1 anyway
-        forest_before[1:self.L+1, 1:self.L+1] = np.random.randit(0, 2, size = (self.L, self.L))
-        forest_before[1:self.L+1, 1:self.L+1] = np.random.random(size = (self.L, self.L)) < fraction
-        
-        return forest_before
-     
-    #Applying forest fire rules    
-    def iterate(forest_before)
+        #forest_before[1:self.L+1, 1:self.L+1] = np.random.randit(0, 2, size = (self.L, self.L))
+        #forest_before[1:self.L+1, 1:self.L+1] = np.random.random(size = (self.L, self.L)) < fraction
+
     
-        forest_after = np.zeros((self.L_with_boundary, self.L_with_boundary))
+     
+    def drive(self, p: float = 0.05):
+        """
+        Drive the simulation by creating new trees.
         
+        :param p: probability of a new tree growh per empty cell
+        :type p: float
+
+        """
         for ix in range(1,self.L+1):
             for iy in range(1,self.L+1):
                 #ash
-                if forest_before[ix,iy] == ash and np.random.random() <= self.p:
-                    forest_after[ix,iy] = tree
+                if self.values[ix,iy] == ash and np.random.random() <= p:
+                    self.values[ix,iy] = tree
+ 
+
+    def topple_dissipate(self,  f: float = 0.001,):
+        """
+        Forest burning and turning into ash. 
+        
+        :param p: probability of a new tree growh per empty cell, must be smaller than p
+        :type p: float
+        """
+         
+        for ix in range(1,self.L+1):
+            for iy in range(1,self.L+1):
                 #tree
-                if forest_before[ix,iy] == tree
-                    forest_after[ix,iy] = tree
+                if self.values[ix,iy] == tree
                     for dx, dy in neighbours:
-                        if forest_before[ix+dx, iy+dy] == burning:
-                            forest_after[ix,iy] = burning
+                        if self.values[ix+dx, iy+dy] == burning:
+                            self.values[ix,iy] = burning
                             break
                     else: np.random.random() <= self.f:
-                            forest_after = burning
+                        self.values[ix,iy] = burning
+               
                 #burning
-                if forest_before[ix,iy] == burning:
-                    forest_after[ix,iy] = ash
+                elif self.values[ix,iy] == burning:
+                    self.values[ix,iy] = ash
        
-        return forest_after
    
 
 
