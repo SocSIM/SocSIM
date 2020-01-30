@@ -9,4 +9,4 @@ def test_boundary_shape():
 
 def test_run():
     sim = BTW(10)
-    sim.run(1000)
+    sim.run(10)
