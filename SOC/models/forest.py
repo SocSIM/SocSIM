@@ -3,6 +3,7 @@
 from SOC import common
 import numpy as np
 import matplotlib.pyplot as plt
+import numba
 
 #Three possible states
 _ash = 0
@@ -24,13 +25,19 @@ class Forest(common.Simulation):
                     ][trees_here] = _tree
         self.p = p
         self.f = f
+
+        xi, yi = np.random.randint(self.BC, self.L_with_boundary - self.BC, 2)
+        self.values[self.BC:self.L_with_boundary - self.BC,
+                    self.BC:self.L_with_boundary - self.BC,
+                    ][xi, yi] = _burning
+
         
     def drive(self):
         """
         Does nothing in FF!
         """
 
-    def topple(self):
+    def topple_dissipate(self):
         """
         Forest burning and turning into ash. 
         
@@ -39,7 +46,6 @@ class Forest(common.Simulation):
         """
          
         #Displacement from a cell to its nearest neighbours
-        neighbours = ((-1,-1), (-1,0), (-1,1), (0,-1), (0, 1), (1,-1), (1,0), (1,1))
 
         # A to T with small probability
         ash_here = self.values == _ash
@@ -49,20 +55,24 @@ class Forest(common.Simulation):
 
         self.values[common.clean_boundary_inplace(trees_grow_here & ash_here, self.BC)] = _tree
 
-        # TODO move to numba
         # Trees start burning: T -> B
-        for ix in range(self.BC, self.L_with_boundary - self.BC):
-            for iy in range(self.BC, self.L_with_boundary - self.BC):
-                if self.values[ix,iy] == _tree:
-                    if np.random.random() <= self.f:
-                        self.values[ix,iy] = _burning
-                    else:
-                        for dx, dy in neighbours:
-                            if self.values[ix+dx, iy+dy] == _burning:
-                                self.values[ix,iy] = _burning
-                                break
+        burn_trees(self.values, self.f, self.BC)
                
         # B to A
         burning_here = self.values == _burning
         self.values[common.clean_boundary_inplace(burning_here, self.BC)] = _ash
         return (self.values[self.BC:-self.BC, self.BC:-self.BC] == _burning).sum()
+
+_neighbours = ((-1,-1), (-1,0), (-1,1), (0,-1), (0, 1), (1,-1), (1,0), (1,1))
+@numba.njit
+def burn_trees(values, f, BC):
+    for ix in range(BC, values.shape[0] - BC):
+        for iy in range(BC, values.shape[1] - BC):
+            if values[ix, iy] == _tree:
+                if np.random.random() <= f:
+                    values[ix,iy] = _burning
+                else:
+                    for dx, dy in _neighbours:
+                        if values[ix+dx, iy+dy] == _burning:
+                            values[ix,iy] = _burning
+                            break
