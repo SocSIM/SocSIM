@@ -1,4 +1,4 @@
-"""Contains the base class for the simulation of abbelian sandpile model."""
+"""Contains the base class for the simulation of abelian sandpile model.""" 
 from SOC import common
 import numpy as np
 from tqdm import auto as tqdm
