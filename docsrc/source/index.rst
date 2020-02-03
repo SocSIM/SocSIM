@@ -21,6 +21,11 @@ Self-Organized Criticality Simulation (SocSim)
     Manna_example
     OFC
     BTW
+    BTWfromMatlab
+    ForestFire
+    IO
+    RetroSynapticSignals
+    RSOC
     
 .. toctree::
     :glob:
