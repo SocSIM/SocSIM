@@ -81,8 +81,10 @@ class Simulation:
         self.releases[...] = 0
         number_of_iterations = self.topple_dissipate()
         
-        AvalancheSize = self.visited.sum()
-        NumberOfReleases = self.releases.sum()
+        AvalancheSize = self.visited[self.BC:-self.BC,
+                                     self.BC:-self.BC].sum()
+        NumberOfReleases = self.releases[self.BC:-self.BC,
+                                         self.BC:-self.BC].sum()
         return dict(AvalancheSize=AvalancheSize, NumberOfReleases=NumberOfReleases, number_of_iterations=number_of_iterations)
 
     def run(self, N_iterations: int,

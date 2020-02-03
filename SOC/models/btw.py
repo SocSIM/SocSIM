@@ -85,9 +85,11 @@ def topple(values: np.ndarray, visited: np.ndarray, releases: np.ndarray, critic
         N = indices.shape[0]
         for i in range(N):
             x, y = indices[i]
-            values[x, y] -= critical_value + 1 # zależy od parametru?
+            values[x, y] -= critical_value + 1
 
             neighbors = np.array([(x - 1, y), (x, y - 1), (x + 1, y), (x, y + 1)])
+            # TODO try moving update: here visited[x, y] = True
+
             for j in range(len(neighbors)):
                 xn, yn = neighbors[j]
                 values[xn, yn] += 1
