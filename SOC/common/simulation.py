@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 import pandas
 import seaborn
-from . import analysis
 import zarr
 import datetime
 
