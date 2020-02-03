@@ -106,9 +106,6 @@ If you want to update web-page, copy generated web-page into `/docs` folder.
    + Creation of common modules.
    + Automatic documentation generation.
    + Readability of code and easy of use(between clarity and speed, we should choose clarity).   
- 
-Advanced topics: 
-+ How we can apply [Keras](https://github.com/keras-team/keras)? Predictions, finding hidden parameters, etc.
 
 ### 0.2 Commitments
 
@@ -130,6 +127,11 @@ pip install nbsphinx
 [pandoc](https://pandoc.org/installing.html)
 
 Dependencies of sphinx: `recommonmark`.
+
+## What's next?
+
++ How we can apply [Keras](https://github.com/keras-team/keras)? Predictions, finding hidden parameters, etc.
++ Batch processes running. Dask.
 
 ## 3. Links/References
 
