@@ -229,8 +229,47 @@ class Simulation:
         self.L = root.attrs['L']
         self.save_every = root.attrs['save_every']
     
-    def get_exponent(self, *args, **kwargs):
-        return analysis.get_exponent(self.data_df, *args, **kwargs)
+
+    def get_exponent(self,
+                     column='AvalancheSize',
+                     low: int = 1,
+                     high: int = 10,
+                     plot = True, 
+                     plot_filename=None):
+        df = self.data_df
+        filtered = df.loc[df.number_of_iterations != 0, column]
+        sizes, counts = np.unique(filtered, return_counts=True)
+        filtered = df.number_of_iterations[df.number_of_iterations != 0]
+        sizes, counts = np.unique(filtered, return_counts=True)
+        indices = (low < sizes) & (sizes < high)
+        coef_a, coef_b = poly = np.polyfit(np.log10(sizes[indices]), np.log10(counts[indices]), 1)
+        # assert smooth_width < hist_num
+        #     second_deriv = grab_second_deriv(log_heights, smooth_width)
+        #     ind_min, ind_max = find_largest_true_block(np.abs(second_deriv) <= d2_cutoff)
+        # else:
+        #     ind_min, ind_max = cutoffs
+
+        if plot:
+            fig, ax = plt.subplots()
+            ax.loglog(sizes, counts, "o", label="Data")
+            x_plot = np.array([low, high])
+            ax.loglog(x_plot,
+                      10**(np.polyval((poly), np.log10(x_plot))),
+                      label=fr"$y = {10**coef_b:.3f} \exp({coef_a:.4f} x)$")
+            ax.axvline(low, linestyle="--", label=f"Low cutoff: {low:.3f}")
+            ax.axvline(high,  linestyle="--", label=f"High cutoff: {high:.3f}")
+            ax.grid()
+            ax.legend(loc='best')
+            ax.set_xlabel(column)
+            ax.set_ylabel(f"Count[{column}]")
+            plt.tight_layout()
+            if plot_filename is None:
+                plt.show()
+            else:
+                fig.savefig(plot_filename)
+                plt.close()
+        print(f"y = {10**coef_b:.3f} exp({coef_a:.4f} x)")
+        return dict(exponent=coef_a, intercept = coef_b)
 
     @classmethod
     def from_file(cls, filename):
