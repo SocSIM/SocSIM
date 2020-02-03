@@ -20,7 +20,13 @@ Self-Organized Criticality Simulation (SocSim)
     StandardWorkflow
     Manna_example
     OFC
+    OFC_example
     BTW
+    ForestFire
+    Dask-scheduling
+    IO
+    RSOC
+    RetroSynapticSignals
     
 .. toctree::
     :glob:
