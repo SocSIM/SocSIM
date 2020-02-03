@@ -105,12 +105,10 @@ If you want to update web-page, copy generated web-page into `/docs` folder.
    + Unit Tests.
    + Creation of common modules.
    + Automatic documentation generation.
-   + Readability of code and easy of use(between clarity and speed, we should choose clarity).
-+ Input\Output of program. Database of simulations. In other word we should somehow track I/O of program for reproducing or postprocessing of results. And as experience shows it is a 60% of problem. Should we use some databases or immediately process results and save them in form of posts(like Jupyter or Mathematica)? Also those "posts" should be on website or github wiki?    
+   + Readability of code and easy of use(between clarity and speed, we should choose clarity).   
  
 Advanced topics: 
 + How we can apply [Keras](https://github.com/keras-team/keras)? Predictions, finding hidden parameters, etc.
-+ How about quantum algorithms?
 
 ### 0.2 Commitments
 
