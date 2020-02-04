@@ -11,18 +11,19 @@ import random
 
 
 class OFC(common.Simulation):
-    """Implements the OFC model."""
+    """
+    Implements the OFC model.
+
+    :param L: linear size of lattice, without boundary layers
+    :type L: int
+    :param critical_value: 1.0 by default - above this value, nodes start toppling.
+        At  0.25 -> full force distributed (if 4 neighbours)
+    :type critical_value: float
+    :param conservation_lvl: 0.25 by default - fraction of the force from a toppling site going to its neighbour
+    :type conservation_lvl: float
+    """
 
     def __init__(self, critical_value: float = 1., conservation_lvl: float = 0.25, *args, **kwargs):
-        """
-        :param L: linear size of lattice, without boundary layers
-        :type L: int
-        :param critical_value: 1.0 by default - above this value, nodes start toppling
-        :type critical_value: float
-        # 0.25 -> full force distributed (if 4 neighbours)
-        :param conservation_lvl: 0.25 by default - fraction of the force from a toppling site going to its neighbour
-        :type conservation_lvl: float
-        """
         super().__init__(*args, **kwargs)
         self.critical_value = critical_value
         self.values = np.random.rand(
@@ -38,7 +39,7 @@ class OFC(common.Simulation):
         """
 
         # decreasing critical_value to the max_value
-        max_value = np.max(self.values[self.BC:-self.BC, self.BC:-self.BC])
+        max_value = np.max(self.inside((self.values)))
         self.critical_value_current = max_value
 
         # TODO MAYBE random loading vs obecnie zrobiony homogeneous loading?
@@ -58,9 +59,6 @@ class OFC(common.Simulation):
     def _save_snapshot(self, i):
         self.saved_snapshots[i // self.save_every] = self.values - \
             self.critical_value_current
-
-
-_DEBUG = True
 
 
 @numba.njit
@@ -98,10 +96,7 @@ def topple(values: np.ndarray, visited: np.ndarray, releases: np.ndarray, critic
         N = indices.shape[0]
         for i in range(N):
             x, y = index = indices[i]
-            if _DEBUG:
-                width, height = values.shape
-                assert boundary_size <= x < width
-                assert boundary_size <= y < width
+
             neighbors = index + np.array([[0, 1], [-1, 0], [1, 0], [0,-1]])
               # TODO crack model nie wraca do sąsiadów, którzy już releasowali energię
             for j in range(len(neighbors)):

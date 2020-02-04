@@ -292,8 +292,6 @@ class Simulation:
         df = self.data_df
         filtered = df.loc[df.number_of_iterations != 0, column]
         sizes, counts = np.unique(filtered, return_counts=True)
-        filtered = df.number_of_iterations[df.number_of_iterations != 0]
-        sizes, counts = np.unique(filtered, return_counts=True)
         indices = (low < sizes) & (sizes < high)
         coef_a, coef_b = poly = np.polyfit(np.log10(sizes[indices]),
                                            np.log10(counts[indices]),

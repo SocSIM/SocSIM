@@ -1,32 +1,22 @@
 """Contains the base class for the simulation of abelian sandpile model.""" 
 from SOC import common
 import numpy as np
-from tqdm import auto as tqdm
 import numba
-import matplotlib.pyplot as plt
-
 
 class BTW(common.Simulation):
-    """Implements the BTW model."""
+    """
+    Implements the BTW model.
+
+    :param L: linear size of lattice, without boundary layers
+    :type L: int
+    """
+
     def __init__(self, *args, **kwargs):
-        """
-        :param L: linear size of lattice, without boundary layers
-        :type L: int
-        """
         super().__init__(*args, **kwargs)
         self.d = 2 #lattice dimmension 
         self.q = 2*self.d #grains amount used at driving 
         self.z_c = self.q - 1 #critical slope
         self.values = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
-
-    def adjacent_indexes(self, x, y):
-        """
-        Evaluates adjacent indexes to (x, y). Clockwise order,
-        starting from left.
-        """
-        # TODO rise error if x,y are out of boundaries
-        return [(x - 1, y), (x, y - 1), (x + 1, y), (x, y + 1)]
-
 
     def drive(self, num_particles: int = 1):
         """
