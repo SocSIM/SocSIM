@@ -29,11 +29,6 @@ Self-Organized Criticality Simulation (SocSim)
 .. toctree::
     :glob:
     :titlesonly:
-    :caption: Miscelanous (development and testing)
+    :caption: The Code
 
     api
-
-SOCSIM program
---------------
-
-.. automodule:: SOC
