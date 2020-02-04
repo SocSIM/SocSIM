@@ -5,38 +5,45 @@ import numba
 import matplotlib.pyplot as plt
 from matplotlib import animation
 import pandas
-import seaborn
 import zarr
 import datetime
+import typing
 
 class Simulation:
-    """Base class for SOC simulations."""
+    """Base class for SOC simulations.
+
+    :param L: linear size of lattice, without boundary layers
+    :type L: int
+    :param save_every: number of iterations per snapshot save
+    :type save_every: int or None
+    :param wait_for_n_iters: How many iterations to skip to skip before saving data?
+    :type wait_for_n_iters: int
+    """
     values = NotImplemented
     saved_snapshots = NotImplemented
 
     BOUNDARY_SIZE = BC = 1
     def __init__(self, L: int, save_every: int = 1, wait_for_n_iters: int = 10):
-        """__init__
-
-        :param L: linear size of lattice, without boundary layers
-        :type L: int
-        :param save_every: number of iterations per snapshot save
-        :type save_every: int or None
-        """
         self.L = L
         self.visited = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=bool)
         self.data_acquisition = []
         self.save_every = save_every
         self.wait_for_n_iters = wait_for_n_iters
         # zliczanie relaksacji
-        self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
+        self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int) # TODO przenieść konkretnie do OFC?
 
     @property
-    def size(self):
+    def size(self) -> int:
+        """
+        The total size of the simulation grid, without boundaries
+        """
         return self.L**2
 
     @property
-    def L_with_boundary(self):
+    def L_with_boundary(self) -> int:
+        """
+        The total width of the simulation grid, with boundaries.
+        """
         return self.L + 2 * self.BOUNDARY_SIZE
 
     def drive(self):
@@ -58,13 +65,26 @@ class Simulation:
     @classmethod
     def clean_boundary_inplace(cls, array: np.ndarray) -> np.ndarray:
         """
-        Convenience wrapper to `clean_boundary_inplace` with the simulation's boundary size. 
+        Convenience wrapper to `common.clean_boundary_inplace` with the simulation's boundary size.
 
-        :param array:
+        :param array: array to clean
         :type array: np.ndarray
         :rtype: np.ndarray
         """
-        return clean_boundary_inplace(array, self.BOUNDARY_SIZE)
+        return clean_boundary_inplace(array, cls.BOUNDARY_SIZE)
+
+    @classmethod
+    def inside(cls, array: np.ndarray) -> np.ndarray:
+        """
+        Convenience function to get an array without simulation boundaries
+
+        :param array: array
+        :type array: np.ndarray
+        :return: array of width smaller by 2BC
+        :rtype: np.ndarray
+        """
+        return array[cls.BC:-cls.BC, cls.BC:-cls.BC]
+
 
     def AvalancheLoop(self) -> dict:
         """
@@ -77,19 +97,17 @@ class Simulation:
         :rtype: dict
         """
         self.visited[...] = False
-        self.releases[...] = 0
+        self.releases[...] = 0      # TODO this could definitely simply be overridden in OFC!
         number_of_iterations = self.topple_dissipate()
         
-        AvalancheSize = self.visited[self.BC:-self.BC,
-                                     self.BC:-self.BC].sum()
-        NumberOfReleases = self.releases[self.BC:-self.BC,
-                                         self.BC:-self.BC].sum()
+        AvalancheSize = self.inside(self.visited).sum()
+        NumberOfReleases = self.inside(self.releases).sum()
         return dict(AvalancheSize=AvalancheSize, NumberOfReleases=NumberOfReleases, number_of_iterations=number_of_iterations)
 
     def run(self, N_iterations: int,
             filename: str  = None,
             wait_for_n_iters: int = 10,
-            ) -> dict:
+            ) -> str:
 
         """
         Simulation loop. Drives the simulation, possibly starts avalanches, gathers data.
@@ -136,19 +154,33 @@ class Simulation:
                 self._save_snapshot(i)
         return filename
 
-    def _save_snapshot(self, i):
+    def _save_snapshot(self, i: int):
+        """
+        Use Zarr to save the current values array as snapshot in the appropriate time index.
+
+        :param i: timestep index
+        :type i: int
+        """
         self.saved_snapshots[i // self.save_every] = self.values
 
     @property
-    def data_df(self):
+    def data_df(self) -> pandas.DataFrame:
+        """
+        Displays the gathered data as a Pandas DataFrame.
+
+        :return: dataframe with gathered data
+        :rtype: pandas.DataFrame
+        """
         return pandas.DataFrame(self.data_acquisition)
 
-    def plot_histogram(self, column='AvalancheSize', num=50, filename = None, plot = True):
-        return analysis.plot_histogram(self.data_df, column, num, filename, plot)
-
-    def plot_state(self, with_boundaries = False):
+    def plot_state(self, with_boundaries: bool = False) -> plt.Figure:
         """
         Plots the current state of the simulation.
+
+        :param with_boundaries: should the boundaries be displayed as well?
+        :type with_boundaries: bool
+        :return: figure with plot
+        :rtype: plt.Figure
         """
         fig, ax = plt.subplots()
 
@@ -162,8 +194,10 @@ class Simulation:
         plt.colorbar(IM)
         return fig
 
-    def animate_states(self, notebook: bool = False, with_boundaries: bool = False,
-                       interval = 30,
+    def animate_states(self,
+                       notebook: bool = False,
+                       with_boundaries: bool = False,
+                       interval: int = 30,
                        ):
         """
         Animates the collected states of the simulation.
@@ -173,6 +207,8 @@ class Simulation:
         :type notebook: bool
         :param with_boundaries: include boundaries in the animation?
         :type with_boundaries: bool
+        :param interval: number of miliseconds to wait between each frame.
+        :type interval: int
         """
         fig, ax = plt.subplots()
 
@@ -213,6 +249,7 @@ class Simulation:
 
         root = zarr.open_group('state/' + file_name + '.zarr', mode = 'w')
         values = root.create_dataset('values', shape = (self.L_with_boundary, self.L_with_boundary), chunks = (10, 10), dtype = 'i4')
+        # TODO this probably still needs fixing
         values = zarr.array(self.values)
         #data_acquisition = root.create_dataset('data_acquisition', shape = (len(self.data_acquisition)), chunks = (1000), dtype = 'i4')
         #data_acquisition = zarr.array(self.data_acquisition)
@@ -221,6 +258,7 @@ class Simulation:
 
         return root
 
+    # TODO should be a classmethod
     def open(self, file_name = 'sim'):
         root = zarr.open_group('state/' + file_name + '.zarr', mode = 'r')
         self.values = np.array(root['values'][:])
@@ -230,24 +268,36 @@ class Simulation:
     
 
     def get_exponent(self,
-                     column='AvalancheSize',
+                     column: str = 'AvalancheSize',
                      low: int = 1,
                      high: int = 10,
-                     plot = True, 
-                     plot_filename=None):
+                     plot: bool = True,
+                     plot_filename: typing.Optional[str] = None) -> dict:
+        """
+        Plot histogram of gathered data from data_df,
+
+        :param column: which column of data_df should be visualized?
+        :type column: str
+        :param low: lower cutoff for log-log-linear fit
+        :type low: int
+        :param high: higher cutoff for log-log-linear fit
+        :type high: int
+        :param plot: if False, skips all plotting and just returns fit parameters
+        :type plot: bool
+        :param plot_filename: optional filename for saved plot. This skips displaying the plot!
+        :type plot_filename: bool
+        :return: fit parameters
+        :rtype: dict
+        """
         df = self.data_df
         filtered = df.loc[df.number_of_iterations != 0, column]
         sizes, counts = np.unique(filtered, return_counts=True)
         filtered = df.number_of_iterations[df.number_of_iterations != 0]
         sizes, counts = np.unique(filtered, return_counts=True)
         indices = (low < sizes) & (sizes < high)
-        coef_a, coef_b = poly = np.polyfit(np.log10(sizes[indices]), np.log10(counts[indices]), 1)
-        # assert smooth_width < hist_num
-        #     second_deriv = grab_second_deriv(log_heights, smooth_width)
-        #     ind_min, ind_max = find_largest_true_block(np.abs(second_deriv) <= d2_cutoff)
-        # else:
-        #     ind_min, ind_max = cutoffs
-
+        coef_a, coef_b = poly = np.polyfit(np.log10(sizes[indices]),
+                                           np.log10(counts[indices]),
+                                           1)
         if plot:
             fig, ax = plt.subplots()
             ax.loglog(sizes, counts, "o", label="Data")
@@ -270,8 +320,17 @@ class Simulation:
         print(f"y = {10**coef_b:.3f} exp({coef_a:.4f} x)")
         return dict(exponent=coef_a, intercept = coef_b)
 
+    # TODO how is this different from `load`?
     @classmethod
-    def from_file(cls, filename):
+    def from_file(cls, filename: str):
+        """
+        Loads simulation state from a saved one.
+
+        :param filename: Filename to be loaded.
+        :type filename: str
+        :return: simulation object, of the subclass you used
+        :rtype: Simulation
+        """
         saved_snapshots = zarr.open(filename)
         save_every = saved_snapshots.attrs['save_every']
         L = saved_snapshots.shape[1] - 2 * cls.BOUNDARY_SIZE
@@ -289,11 +348,11 @@ def clean_boundary_inplace(array: np.ndarray, boundary_size: int, fill_value = F
 
     Works inplace - will modify the existing array!
 
-    :param array:
+    :param array: array to be cleaned
     :type array: np.ndarray
     :param boundary_size:
     :type boundary_size: int
-    :param fill_value:
+    :param fill_value: value to fill boundaries with
     :rtype: np.ndarray
     """
     array[:boundary_size, :] = fill_value
