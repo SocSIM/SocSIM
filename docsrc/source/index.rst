@@ -31,9 +31,6 @@ Self-Organized Criticality Simulation (SocSim)
     :glob:
     :titlesonly:
     :caption: Miscelanous (development and testing)
-    
-    jupyternotebooks.rst
-    sphinxtest
 
 SOCSIM program
 --------------
