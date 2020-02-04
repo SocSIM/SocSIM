@@ -17,7 +17,6 @@ Self-Organized Criticality Simulation (SocSim)
     :glob:
     :caption: Jupyter notebooks
     
-    StandardWorkflow
     Manna_example
     OFC
     BTW
@@ -31,6 +30,8 @@ Self-Organized Criticality Simulation (SocSim)
     :glob:
     :titlesonly:
     :caption: Miscelanous (development and testing)
+
+    api
 
 SOCSIM program
 --------------
