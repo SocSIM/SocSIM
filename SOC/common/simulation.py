@@ -29,8 +29,6 @@ class Simulation:
         self.data_acquisition = []
         self.save_every = save_every
         self.wait_for_n_iters = wait_for_n_iters
-        # zliczanie relaksacji
-        self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int) # TODO przenieść konkretnie do OFC?
 
     @property
     def size(self) -> int:
@@ -97,12 +95,10 @@ class Simulation:
         :rtype: dict
         """
         self.visited[...] = False
-        self.releases[...] = 0      # TODO this could definitely simply be overridden in OFC!
         number_of_iterations = self.topple_dissipate()
         
         AvalancheSize = self.inside(self.visited).sum()
-        NumberOfReleases = self.inside(self.releases).sum()
-        return dict(AvalancheSize=AvalancheSize, NumberOfReleases=NumberOfReleases, number_of_iterations=number_of_iterations)
+        return dict(AvalancheSize=AvalancheSize, number_of_iterations=number_of_iterations)
 
     def run(self, N_iterations: int,
             filename: str  = None,
@@ -298,11 +294,13 @@ class Simulation:
                                            1)
         if plot:
             fig, ax = plt.subplots()
-            ax.loglog(sizes, counts, "o", label="Data")
+            ax.loglog(sizes, counts, "o", ms, label="data")
             x_plot = np.array([low, high])
             ax.loglog(x_plot,
                       10**(np.polyval((poly), np.log10(x_plot))),
-                      label=fr"$y = {10**coef_b:.3f} \exp({coef_a:.4f} x)$")
+                      label=fr"$y = {10**coef_b:.1f}\ \exp({coef_a:.4f} x)$",
+                      alpha=0.5)
+
             ax.axvline(low, linestyle="--", label=f"Low cutoff: {low:.3f}")
             ax.axvline(high,  linestyle="--", label=f"High cutoff: {high:.3f}")
             ax.grid()

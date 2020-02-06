@@ -31,6 +31,8 @@ class OFC(common.Simulation):
         self.conservation_lvl = conservation_lvl
 
         self.critical_value_current = self.critical_value
+        # zliczanie relaksacji
+        self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int) # TODO przenieść konkretnie do OFC?
 
     def drive(self):
         """
@@ -59,6 +61,24 @@ class OFC(common.Simulation):
     def _save_snapshot(self, i):
         self.saved_snapshots[i // self.save_every] = self.values - \
             self.critical_value_current
+
+    def AvalancheLoop(self) -> dict:
+        """
+        Bring the current simulation's state to equilibrium by repeatedly
+        toppling and dissipating.
+
+        Returns a dictionary with the total size of the avalanche
+        and the number of iterations the avalanche took.
+
+        :rtype: dict
+        """
+        self.visited[...] = False
+        self.releases[...] = 0      # TODO this could definitely simply be overridden in OFC!
+        number_of_iterations = self.topple_dissipate()
+        
+        AvalancheSize = self.inside(self.visited).sum()
+        NumberOfReleases = self.inside(self.releases).sum()
+        return dict(AvalancheSize=AvalancheSize, NumberOfReleases=NumberOfReleases, number_of_iterations=number_of_iterations)
 
 
 @numba.njit
