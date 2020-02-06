@@ -11,40 +11,30 @@ _tree = 1
 _burning = 2
 
 class Forest(common.Simulation):
-    def __init__(self, p=0.05, f: float = 0, *args, **kwargs):
-        """
-        :param f: probability of thunder setting a tree on fire; set 0 to disable lighting
-        """
-       
+    """
+    Forest fire model
+
+    :param f: probability of thunder setting a tree on fire; set 0 to disable lighting
+    :param p: probability of a new tree growh per empty cell
+    :type p: float
+    """
+
+    def __init__(self, p: float=0.05, f: float = 0, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.values = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
-        # probabilities = np.random.random(size=(self.L, self.L))
-        # trees_here = probabilities <= p
-        # self.values[self.BC:self.L_with_boundary - self.BC,
-        #             self.BC:self.L_with_boundary - self.BC,
-        #             ][trees_here] = _tree
-        self.values = common.clean_boundary_inplace(np.random.choice([_ash, _tree, _burning], self.values.shape, p=[0.99, 0.01, 0]), self.BC)
+        shape = (self.L_with_boundary, self.L_with_boundary)
+        self.values = common.clean_boundary_inplace(np.random.choice([_ash, _tree, _burning], shape, p=[0.99, 0.01, 0]), self.BC)
         self.new_values = np.zeros_like(self.values)
         self.p = p
         self.f = f
 
-        # xi, yi = np.random.randint(self.BC, self.L_with_boundary - self.BC, 2)
-        # self.values[self.BC:self.L_with_boundary - self.BC,
-        #             self.BC:self.L_with_boundary - self.BC,
-        #             ][xi, yi] = _burning
-
-        
     def drive(self):
         """
         Does nothing in FF!
         """
 
-    def topple_dissipate(self):
+    def topple_dissipate(self)->int:
         """
         Forest burning and turning into ash. 
-        
-        :param p: probability of a new tree growh per empty cell, must be smaller than p
-        :type p: float
         """
          
         #Displacement from a cell to its nearest neighbours
@@ -66,12 +56,20 @@ class Forest(common.Simulation):
 
         self.values, self.new_values = self.new_values, self.values
         self.new_values[...] = 0
-        number_burning = (self.values[self.BC:-self.BC, self.BC:-self.BC] == _burning).sum()
+        number_burning = (self.inside(self.values) == _burning).sum()
         return number_burning
 
 _neighbours = ((-1,-1), (-1,0), (-1,1), (0,-1), (0, 1), (1,-1), (1,0), (1,1))
 @numba.njit
-def burn_trees(new_values, values, f, BC):
+def burn_trees(new_values: np.ndarray, values: np.ndarray, f: float, BC: int):
+    """
+    Tree-burning loop
+
+    :param new_values: Temporary array of values in the next step.
+    :param values: Array of current values.
+    :param f: probability of thunder strike
+    :param BC: size of boundary
+    """
     for ix in range(BC, values.shape[0] - BC):
         for iy in range(BC, values.shape[1] - BC):
             if values[ix, iy] == _tree:

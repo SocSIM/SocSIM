@@ -33,12 +33,13 @@ class Manna(common.Simulation):
         for x, y in location:
             self.values[x, y] += 1
 
-    def topple_dissipate(self) -> bool:
+    def topple_dissipate(self) -> int:
         """
         Distribute material from overloaded sites to neighbors.
 
         Convenience wrapper for the numba.njitted `topple_dissipate` function defined in `manna.py`.
 
+        :return: number of iterations it took to
         :rtype: bool
         """
         return topple_dissipate(self.values, self.visited, self.critical_value, self.abelian, self.BOUNDARY_SIZE)
@@ -46,7 +47,7 @@ class Manna(common.Simulation):
 _DEBUG = True
 
 @numba.njit
-def topple_dissipate(values: np.ndarray, visited: np.ndarray, critical_value: int, abelian: bool, boundary_size: int) -> bool:
+def topple_dissipate(values: np.ndarray, visited: np.ndarray, critical_value: int, abelian: bool, boundary_size: int) -> int:
 
     """
     Distribute material from overloaded sites to neighbors.
@@ -63,7 +64,8 @@ def topple_dissipate(values: np.ndarray, visited: np.ndarray, critical_value: in
     :type abelian: bool
     :param boundary_size: size of boundary for the array
     :type boundary_size: int
-    :rtype: bool
+    :return: Number of steps it took stuff to topple
+    :rtype: int
     """
 
     number_of_topple_iterations = 0
