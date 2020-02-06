@@ -38,12 +38,12 @@ class BTW(common.Simulation):
         :rtype: int
         """
 
-        return topple(self.values, self.visited, self.releases, self.z_c, self.BOUNDARY_SIZE)    
+        return topple(self.values, self.visited, self.z_c, self.BOUNDARY_SIZE)    
 
 
 
 @numba.njit
-def topple(values: np.ndarray, visited: np.ndarray, releases: np.ndarray, critical_value: int, boundary_size: int) -> int:
+def topple(values: np.ndarray, visited: np.ndarray, critical_value: int, boundary_size: int) -> int:
     """
     Distribute material from overloaded sites to neighbors.
 
@@ -53,8 +53,6 @@ def topple(values: np.ndarray, visited: np.ndarray, releases: np.ndarray, critic
     :type values: np.ndarray
     :param visited: boolean array, needs to be cleaned beforehand
     :type visited: np.ndarray
-    :param releases: boolean array, used to evalute number of sandpiles activations
-    :type releases: np.ndarray
     :param critical_value: nodes topple above this value
     :type critical_value: int
     :param boundary_size: size of boundary for the array
@@ -67,8 +65,6 @@ def topple(values: np.ndarray, visited: np.ndarray, releases: np.ndarray, critic
     active_sites = common.clean_boundary_inplace(values > critical_value, boundary_size)
     
     while active_sites.any():
-        releases += active_sites
-        
         indices = np.vstack(np.where(active_sites)).T
         # a Nx2 array of integer indices for overloaded sites
 
