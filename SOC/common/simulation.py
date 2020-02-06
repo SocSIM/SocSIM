@@ -294,7 +294,7 @@ class Simulation:
                                            1)
         if plot:
             fig, ax = plt.subplots()
-            ax.loglog(sizes, counts, "o", ms, label="data")
+            ax.loglog(sizes, counts, ".", label="data")
             x_plot = np.array([low, high])
             ax.loglog(x_plot,
                       10**(np.polyval((poly), np.log10(x_plot))),
