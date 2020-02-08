@@ -19,8 +19,8 @@ sys.path.append(os.path.abspath('../../..'))
 # -- Project information -----------------------------------------------------
 
 project = 'Self-Organized Criticality Simulation (SocSim)'
-copyright = '2019, Oleg Kmechak'
-author = 'Oleg Kmechak'
+copyright = '2019, Aleksandra Jankowska, Oleg Kmechak, Grzegorz Skóra, Dominik Stańczak'
+author = 'Aleksandra Jankowska, Oleg Kmechak, Grzegorz Skóra, Dominik Stańczak'
 
 # The full version, including alpha/beta/rc tags
 version = '0.2.0'

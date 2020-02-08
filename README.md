@@ -12,96 +12,6 @@ Project is created as part of subject: [Team student projects Faculty of Physics
 
 Programs in Python that simulate dynamical systems that have a critical point as an attractor. So called [__self-organized criticality__(SOC)](https://en.wikipedia.org/wiki/Self-organized_criticality)
 
-## Basic goals of project:
-
-+ Make wide coverage of all self-organized criticality models.
-+ Figuring out the best algorithms. 
-   + Easy scaling on many processors machine(multithreading, [GPGPU](https://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units), CUDA). 
-   + Optimal memory usage.
-   + Applying some common libraries(Working with tensors etc.).
-+ Using some best practice of programming:
-   + [Coding conventions](https://en.wikipedia.org/wiki/Coding_conventions)
-   + Unit Tests.
-   + Creation of common modules.
-   + Automatic documentation generation.
-   + Readability of code and easy of use(between clarity and speed, we should choose clarity).
-+ Input\Output of program. Database of simulations. In other word we should somehow track I/O of program for reproducing or postprocessing of results. And as experience shows it is a 60% of problem. Should we use some databases or immediately process results and save them in form of posts(like Jupyter or Mathematica)? Also those "posts" should be on website or github wiki?    
- 
-Advanced topics: 
-+ How we can apply [Keras](https://github.com/keras-team/keras)? Predictions, finding hidden parameters, etc.
-+ How about quantum algorithms?
-
-
-### 0.1 Ok, some todo's:
-
-In __Basic goals of project__ are some questions and commitment without solutions, so lets list here some priority list:
-
-+ [x] Template of project.
-+ [x] Make an research of _SOC_ topic.
-+ [x] How basic python project template looks like?
-+ [x] Codding conventions in python.
-+ [x] Documentation generation in python.
-+ [x] How to export/save Jupyom/account/repositoriester notebooks(to make a posts later).
-
-For more take a look at [Issues](https://github.com/SocSIM/SocSIM/issues)
-
-### 0.2 Commitments
-
-Here are described code formatting style and other conventions, to make code more _uniform_. Also this section is for newcomers and contributors.
-
-#### Code formatting
-
-Consider next two style guides:
-
-+ [Google Python Style Guide](https://github.com/google/styleguide/blob/gh-pages/pyguide.md), and
-+ [PEP 8 - Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/)(official Python style guide).      
- TODO: add few examples how code should look like.
- 
-#### Unit Tests
-
-SocSim uses the lovely [PyTest](https://docs.pytest.org/en/latest/) for its unit testing needs. Tests are run automatically on every commit using TravisCI.
-
-#### Logging
-
-Logging helps to debug application and also is provided by Python standard library
-[logging](https://docs.python.org/3.9/library/logging.html). Basic tutorial [here](https://docs.python.org/3.9/howto/logging.html#logging-basic-tutorial).
-
-Usage is very simple:
-
-```python
-logger.debug('debug message')
-logger.info('info message')
-logger.warning('warn message')
-logger.error('error message')
-logger.critical('critical message')
-```
-
-This will generate:
-
-```
-2019-06-26 17:27:30,436 - Main   - INFO     - info message
-2019-06-26 17:27:30,437 - Main   - WARNING  - warn message
-2019-06-26 17:27:30,439 - Main   - ERROR    - error message
-2019-06-26 17:27:30,440 - Main   - CRITICAL - critical message
-```
-
-Output will be printed into console and also into log file(appended): `simsoc.log`.
-
-TODO(how to reconfigure logger from inside: level for example)
- 
-#### Documentation
-
-Most popular documentation generator for Python - [Sphinx](http://www.sphinx-doc.org/en/master/). Good tutorial about using Sphinx [here](https://sphinx-tutorial.readthedocs.io/). [Here](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) is example of good Google style docstring standardized by PEP-484.
-
-```bash
-pip install -U sphinx
-pip install sphinx_rtd_theme
-pip install nbsphinx
-```
-[pandoc](https://pandoc.org/installing.html)
-
-Dependencies of sphinx: `recommonmark`.
-
 ## 1. Theoretical problem description
 
 [Self-organized criticality wiki](https://en.wikipedia.org/wiki/Self-organized_criticality):   
@@ -169,6 +79,69 @@ make html
 ```
 Web-page will be generated into `./docsrc/build/html` folder.
 If you want to update web-page, copy generated web-page into `/docs` folder.
+
+## Results
+
+### Manna model(Abelian/non-Abelian)
+
+
+
+### [BTW](https://socsim.readthedocs.io/en/latest/BTW.html)
+
+![power-law](results/power_law_btw.png)
+Fig.2: ...
+
+
+### [OFC](https://socsim.readthedocs.io/en/latest/OFC.html)
+
+![exponents](results/alpha_B.png)
+Fig.3: Comparison of the results from the current code and the results from the original paper by Olami et al. $\alpha$ is the conservation level. The exponent $B$ in Olami et al. (1992) is such, that the probability density of having an earthquake of energy $E$, $P(E_0=E)$, is proportional to $E^{-(1+B)}$. Black dots with error bars represent data extracted from Fig.2 in [Olami et al. (1992)](https://doi.org/10.1103/PhysRevLett.68.1244) -- the simulations made for $35\times35$ system with a series of values of $\alpha$. Olami et al. take the total number of relaxations as proportional to the energy released during a given earthquake. Red circles represent values of $B$ calculated for the apparent exponents (ie. $B=-\tau-1$ if $\tau$ is an apparent exponent for a number of releases, where each release (relaxation) is a transfer of energy from one active site to its neighbours) from exemplary simulations made by the **SocSIM** code for a $35\times35$ system. The simulations for $\alpha=\{0.25,\ 0.2,\ 0.15\}$ were performed for $N=10^8$ and the simulation for $\alpha=0.1$ was perfomed for $N=2\cdot10^8$. The simulations with $\alpha=\{0.06,\ 0.05\}$ were performed for $N=1.5\cdot10^8$; however higher values of $N$ would be suggested for these highly dissipative cases. All the six simulations had thermalization surplus `wait_for_n_iters` $=1\%\cdot N$. The plots for the simulations can be found [here](results/L_35.pdf).
+
+
+### Forest fire
+
+
+
+## Summary of intial goals:
+
++ Make wide coverage of all self-organized criticality models.
++ Figuring out the best algorithms. 
+   + Easy scaling on many processors machine(multithreading, [GPGPU](https://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units), CUDA, [numba](http://numba.pydata.org/)). 
++ Using some best practice of programming:
+   + [Coding conventions](https://en.wikipedia.org/wiki/Coding_conventions)
+   + Unit Tests.
+   + Creation of common modules.
+   + Automatic documentation generation.
+   + Readability of code and easy of use(between clarity and speed, we should choose clarity).   
+
+### 0.2 Commitments
+
+Here are described code formatting style and other conventions, to make code more _uniform_. Also this section is for newcomers and contributors.
+
+#### Unit Tests
+
+SocSim uses the lovely [PyTest](https://docs.pytest.org/en/latest/) for its unit testing needs. Tests are run automatically on every commit using TravisCI.
+ 
+#### Documentation
+
+Most popular documentation generator for Python - [Sphinx](http://www.sphinx-doc.org/en/master/). Good tutorial about using Sphinx [here](https://sphinx-tutorial.readthedocs.io/). [Here](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) is example of good Google style docstring standardized by PEP-484.
+
+```bash
+pip install -U sphinx
+pip install sphinx_rtd_theme
+pip install nbsphinx
+```
+[pandoc](https://pandoc.org/installing.html)
+
+Dependencies of sphinx: `recommonmark`.
+
+## What's next?
+
++ How we can apply [Keras](https://github.com/keras-team/keras)? Predictions, finding hidden parameters, etc.
++ More tests for the batch processes running (Dask)
++ Convenient selection of different boundary conditions of a system (lattice)
++ Parametrization of the earthquake model for the coverage of wider selection of submodels (by including eg.: drive with random loading, toppling to the neighbours in a specific state (crack model), delay of the fracture initiation, threshold for the fracture propagation) like in [Lomnitz-Adler (1993)](https://doi.org/10.1029/93JB01390)
++ Database of the simulations
 
 ## 3. Links/References
 
