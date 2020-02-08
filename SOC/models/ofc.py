@@ -1,9 +1,5 @@
 """Implements the OFC model."""
 
-
-# TODO Partial Stress Drop
-# TODO Crack model
-
 from SOC import common
 import numpy as np
 import numba
@@ -32,7 +28,7 @@ class OFC(common.Simulation):
 
         self.critical_value_current = self.critical_value
         # zliczanie relaksacji
-        self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int) # TODO przenieść konkretnie do OFC?
+        self.releases = np.zeros((self.L_with_boundary, self.L_with_boundary), dtype=int)
 
     def drive(self):
         """
@@ -43,10 +39,6 @@ class OFC(common.Simulation):
         # decreasing critical_value to the max_value
         max_value = np.max(self.inside((self.values)))
         self.critical_value_current = max_value
-
-        # TODO MAYBE random loading vs obecnie zrobiony homogeneous loading?
-
-        # TODO lista kandydatów do pękania?
 
     def topple_dissipate(self) -> int:
         """
@@ -73,7 +65,7 @@ class OFC(common.Simulation):
         :rtype: dict
         """
         self.visited[...] = False
-        self.releases[...] = 0      # TODO this could definitely simply be overridden in OFC!
+        self.releases[...] = 0
         number_of_iterations = self.topple_dissipate()
         
         AvalancheSize = self.inside(self.visited).sum()
@@ -118,7 +110,6 @@ def topple(values: np.ndarray, visited: np.ndarray, releases: np.ndarray, critic
             x, y = index = indices[i]
 
             neighbors = index + np.array([[0, 1], [-1, 0], [1, 0], [0,-1]])
-              # TODO crack model nie wraca do sąsiadów, którzy już releasowali energię
             for j in range(len(neighbors)):
                 xn, yn = neighbors[j]
                 values[xn, yn] += conservation_lvl * (values[x, y] - critical_value_current + critical_value)   # Grassberger (1994), eqns (1)
