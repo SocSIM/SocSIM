@@ -89,13 +89,15 @@ If you want to update web-page, copy generated web-page into `/docs` folder.
 ### [BTW](https://socsim.readthedocs.io/en/latest/BTW.html)
 
 ![power-law](results/power_law_btw.png)
+
 Fig.2: ...
 
 
 ### [OFC](https://socsim.readthedocs.io/en/latest/OFC.html)
 
 ![exponents](results/alpha_B.png)
-Fig.3: Comparison of the results from the current code and the results from the original paper by Olami et al. $\alpha$ is the conservation level. The exponent $B$ in Olami et al. (1992) is such, that the probability density of having an earthquake of energy $E$, $P(E_0=E)$, is proportional to $E^{-(1+B)}$. Black dots with error bars represent data extracted from Fig.2 in [Olami et al. (1992)](https://doi.org/10.1103/PhysRevLett.68.1244) -- the simulations made for $35\times35$ system with a series of values of $\alpha$. Olami et al. take the total number of relaxations as proportional to the energy released during a given earthquake. Red circles represent values of $B$ calculated for the apparent exponents (ie. $B=-\tau-1$ if $\tau$ is an apparent exponent for a number of releases, where each release (relaxation) is a transfer of energy from one active site to its neighbours) from exemplary simulations made by the **SocSIM** code for a $35\times35$ system. The simulations for $\alpha=\{0.25,\ 0.2,\ 0.15\}$ were performed for $N=10^8$ and the simulation for $\alpha=0.1$ was perfomed for $N=2\cdot10^8$. The simulations with $\alpha=\{0.06,\ 0.05\}$ were performed for $N=1.5\cdot10^8$; however higher values of $N$ would be suggested for these highly dissipative cases. All the six simulations had thermalization surplus `wait_for_n_iters` $=1\%\cdot N$. The plots for the simulations can be found [here](results/L_35.pdf).
+
+Fig.3: Comparison of the results from the current code and the results from the original paper by Olami *et al.* *&alpha;* is the conservation level. The exponent *B* in Olami *et al.* (1992) is such, that the probability density of having an earthquake of energy *E*, *P*(*E*<sub>0</sub>=*E*), is proportional to *E*<sup>-(1+*B*)</sup>. Black dots with error bars represent data extracted from Fig.2 in [Olami *et al.* (1992)](https://doi.org/10.1103/PhysRevLett.68.1244) -- the simulations made for a system with size *L* = 35 with a series of values of *&alpha;*. Olami *et al.* take the total number of relaxations as proportional to the energy released during a given earthquake. Red circles represent values of *B* calculated for the apparent exponents (*ie.* *B* = -*&tau;* - 1 if *&tau;* is an apparent exponent for a number of releases, where each release (relaxation) is a transfer of energy from one active site to its neighbours) from exemplary simulations made by the **SocSIM** code for a *L* = 35 system. The simulations for *&alpha;* = {0.25, 0.2, 0.15} were performed for *N* = 10<sup>8</sup> and the simulation for *&alpha;* = 0.1 was perfomed for *N* = 2&middot;10<sup>8</sup>. The simulations with *&alpha;* = {0.06, 0.05} were performed for *N* = 1.5&middot;10<sup>8</sup>; however higher values of *N* would be suggested for these highly dissipative cases. All the six simulations had thermalization surplus `wait_for_n_iters` = 1%&middot;*N*. The plots for the simulations can be found [here](results/L_35.pdf).
 
 
 ### Forest fire
