@@ -81,6 +81,7 @@ Web-page will be generated into `./docsrc/build/html` folder.
 If you want to update web-page, copy generated web-page into `/docs` folder.
 
 ## Results
+Click the model's name for more examples:
 
 ### [BTW](https://socsim.readthedocs.io/en/latest/BTW.html)
 
