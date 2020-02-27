@@ -32,7 +32,7 @@ Project folder structure is inspired by these sources:
 #### socsim:  
 
 + __docsrc__ - holds [Sphinx](http://www.sphinx-doc.org/en/master/) scripts used for documentation generation.
-+ __docs__ - GitHub [configuration folder](https://help.github.com/en/articles/configuring-a-publishing-source-for-github-pages), which holds [web-page](https://okmechak.github.io/socsim/) of project.
++ __docs__ - GitHub [configuration folder](https://help.github.com/en/articles/configuring-a-publishing-source-for-github-pages), which holds [web-page](https://github.com/SocSIM/SocSIM) of project.
 + __resource__ - Non executable files.
 + __results__ - folder used for holding results of simulation, _Jupiter_ notebooks and different use cases.
 + __SOC__ - main project folder, which holds all source code.
@@ -81,26 +81,21 @@ Web-page will be generated into `./docsrc/build/html` folder.
 If you want to update web-page, copy generated web-page into `/docs` folder.
 
 ## Results
-
-### Manna model(Abelian/non-Abelian)
-
-
+Click the model's name for more examples:
 
 ### [BTW](https://socsim.readthedocs.io/en/latest/BTW.html)
 
 ![power-law](results/power_law_btw.png)
 
-Fig.2: ...
+### [Manna model(Abelian/non-Abelian)](https://socsim.readthedocs.io/en/latest/Manna_example.html)
 
+![mannaexample](results/manna_exmpl.png)
 
 ### [OFC](https://socsim.readthedocs.io/en/latest/OFC.html)
 
-![exponents](results/alpha_B.png)
+![ofcexample](results/ofc_exmpl2.png)
 
-Fig.3: Comparison of the results from the current code and the results from the original paper by Olami *et al.* *&alpha;* is the conservation level. The exponent *B* in Olami *et al.* (1992) is such, that the probability density of having an earthquake of energy *E*, *P*(*E*<sub>0</sub>=*E*), is proportional to *E*<sup>-(1+*B*)</sup>. Black dots with error bars represent data extracted from Fig.2 in [Olami *et al.* (1992)](https://doi.org/10.1103/PhysRevLett.68.1244) -- the simulations made for a system with size *L* = 35 with a series of values of *&alpha;*. Olami *et al.* take the total number of relaxations as proportional to the energy released during a given earthquake. Red circles represent values of *B* calculated for the apparent exponents (*ie.* *B* = -*&tau;* - 1 if *&tau;* is an apparent exponent for a number of releases, where each release (relaxation) is a transfer of energy from one active site to its neighbours) from exemplary simulations made by the **SocSIM** code for a *L* = 35 system. The simulations for *&alpha;* = {0.25, 0.2, 0.15} were performed for *N* = 10<sup>8</sup> and the simulation for *&alpha;* = 0.1 was perfomed for *N* = 2&middot;10<sup>8</sup>. The simulations with *&alpha;* = {0.06, 0.05} were performed for *N* = 1.5&middot;10<sup>8</sup>; however higher values of *N* would be suggested for these highly dissipative cases. All the six simulations had thermalization surplus `wait_for_n_iters` = 1%&middot;*N*. The plots for the simulations can be found [here](results/L_35.pdf).
-
-
-### Forest fire
+### [Forest fire](https://socsim.readthedocs.io/en/latest/ForestFire.html)
 
 
 
