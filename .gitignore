@@ -342,3 +342,6 @@ docsrc/build
 .vscode
 *.sln
 *.egg-info
+
+# venv
+.venvsocsim
